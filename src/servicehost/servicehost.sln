@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yourservice", "tests\yourse
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost_tests", "tests\servicehost_tests\servicehost_tests.csproj", "{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demoservice", "demoservice\demoservice.csproj", "{85B85E4F-99A6-4174-A770-9DE650B1CC47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -39,6 +41,10 @@ Global
 		{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}.Debug|x86.Build.0 = Debug|x86
 		{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}.Release|x86.ActiveCfg = Release|x86
 		{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}.Release|x86.Build.0 = Release|x86
+		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Debug|x86.Build.0 = Debug|Any CPU
+		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Release|x86.ActiveCfg = Release|Any CPU
+		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D61247D-E144-4B19-A4CF-AE7746BA7435} = {E04CE084-A752-46D8-B301-DFD657C1D588}
