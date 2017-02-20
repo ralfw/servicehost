@@ -30,14 +30,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="RestSharp">
+      <HintPath>..\..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
+      <HintPath>..\..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -48,11 +48,11 @@
     <Compile Include="test_Acceptance.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\servicehost\servicehost.csproj">
+    <ProjectReference Include="..\..\servicehost\servicehost.csproj">
       <Project>{F0176FC7-ACC8-46FF-9DF3-90157205D69C}</Project>
       <Name>servicehost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\servicehost.contract\servicehost.contract.csproj">
+    <ProjectReference Include="..\..\servicehost.contract\servicehost.contract.csproj">
       <Project>{AFA702A0-4CD9-452B-90A0-CB52C48170AE}</Project>
       <Name>servicehost.contract</Name>
     </ProjectReference>
@@ -61,6 +61,10 @@
     <None Include="packages.config" />
     <None Include="..\myservice\bin\Debug\myservice.dll">
       <Link>myservice.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\myservice\bin\Debug\Newtonsoft.Json.dll">
+      <Link>Newtonsoft.Json.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\yourservice\bin\Debug\yourservice.dll">

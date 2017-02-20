@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceInfo.cs" />
     <Compile Include="nancy\NancyBootstrapper.cs" />
     <Compile Include="nancy\NancyHosting.cs" />
     <Compile Include="nancy\NancyServiceModule.cs" />
@@ -49,6 +48,7 @@
     <Compile Include="ServiceCollector.cs" />
     <Compile Include="CLI.cs" />
     <Compile Include="ServiceHost.cs" />
+    <Compile Include="data\ServiceInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="nancy\" />
+    <Folder Include="data\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

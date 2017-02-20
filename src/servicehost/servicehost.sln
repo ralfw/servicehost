@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost", "servicehost\servicehost.csproj", "{F0176FC7-ACC8-46FF-9DF3-90157205D69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myservice", "myservice\myservice.csproj", "{5D61247D-E144-4B19-A4CF-AE7746BA7435}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost.contract", "servicehost.contract\servicehost.contract.csproj", "{AFA702A0-4CD9-452B-90A0-CB52C48170AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yourservice", "yourservice\yourservice.csproj", "{ECF641C5-7CFA-4920-A185-F89503D4C9DA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E04CE084-A752-46D8-B301-DFD657C1D588}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{E04CE084-A752-46D8-B301-DFD657C1D588}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myservice", "tests\myservice\myservice.csproj", "{5D61247D-E144-4B19-A4CF-AE7746BA7435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost_tests", "servicehost_tests\servicehost_tests.csproj", "{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yourservice", "tests\yourservice\yourservice.csproj", "{ECF641C5-7CFA-4920-A185-F89503D4C9DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost_tests", "tests\servicehost_tests\servicehost_tests.csproj", "{E991DAD3-B56C-4080-8373-0BC3CFCFAF55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +23,14 @@ Global
 		{F0176FC7-ACC8-46FF-9DF3-90157205D69C}.Debug|x86.Build.0 = Debug|x86
 		{F0176FC7-ACC8-46FF-9DF3-90157205D69C}.Release|x86.ActiveCfg = Release|x86
 		{F0176FC7-ACC8-46FF-9DF3-90157205D69C}.Release|x86.Build.0 = Release|x86
-		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Debug|x86.Build.0 = Debug|Any CPU
-		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Release|x86.ActiveCfg = Release|Any CPU
-		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Release|x86.Build.0 = Release|Any CPU
 		{AFA702A0-4CD9-452B-90A0-CB52C48170AE}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{AFA702A0-4CD9-452B-90A0-CB52C48170AE}.Debug|x86.Build.0 = Debug|Any CPU
 		{AFA702A0-4CD9-452B-90A0-CB52C48170AE}.Release|x86.ActiveCfg = Release|Any CPU
 		{AFA702A0-4CD9-452B-90A0-CB52C48170AE}.Release|x86.Build.0 = Release|Any CPU
+		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Debug|x86.Build.0 = Debug|Any CPU
+		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Release|x86.ActiveCfg = Release|Any CPU
+		{5D61247D-E144-4B19-A4CF-AE7746BA7435}.Release|x86.Build.0 = Release|Any CPU
 		{ECF641C5-7CFA-4920-A185-F89503D4C9DA}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{ECF641C5-7CFA-4920-A185-F89503D4C9DA}.Debug|x86.Build.0 = Debug|Any CPU
 		{ECF641C5-7CFA-4920-A185-F89503D4C9DA}.Release|x86.ActiveCfg = Release|Any CPU
@@ -43,5 +43,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5D61247D-E144-4B19-A4CF-AE7746BA7435} = {E04CE084-A752-46D8-B301-DFD657C1D588}
 		{ECF641C5-7CFA-4920-A185-F89503D4C9DA} = {E04CE084-A752-46D8-B301-DFD657C1D588}
+		{E991DAD3-B56C-4080-8373-0BC3CFCFAF55} = {E04CE084-A752-46D8-B301-DFD657C1D588}
 	EndGlobalSection
 EndGlobal

@@ -7,6 +7,8 @@ using servicehost;
 using servicehost.nonpublic;
 using servicehost.nancy;
 using RestSharp;
+using System.IO;
+using System.Text;
 
 namespace servicehost_tests
 {
@@ -109,8 +111,14 @@ namespace servicehost_tests
                     cli.DownloadString("http://localhost:1234/echo_querystring?payload=$data");
                 }
                 catch (WebException webex) {
-                    //TODO: how to get at the exception message from the server?
-                    Console.WriteLine("*** {0}", webex);                    
+                    var resp = (HttpWebResponse)webex.Response;
+                    Assert.AreEqual(HttpStatusCode.InternalServerError, resp.StatusCode);
+
+                    var readStream = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+                    var text = readStream.ReadToEnd();
+
+                    Console.WriteLine("Expected exception:");
+                    Console.WriteLine(text);
                 }
             }
         }

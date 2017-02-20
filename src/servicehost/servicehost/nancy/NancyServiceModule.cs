@@ -30,7 +30,7 @@ namespace servicehost.nonpublic.nancy
                     return Response.AsText(output, "application/json");
                 }
                 catch (Exception ex) {
-                    var resp = (Response)($"Service request could not be handled! Exception: {ex}");
+                    var resp = (Response)($"ServiceHost: Service request could not be handled! Exception: {ex}");
                     resp.StatusCode = HttpStatusCode.InternalServerError;
                     return resp;
                 }
