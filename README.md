@@ -96,4 +96,4 @@ Or you use a tool like [Postman](https://www.getpostman.com):
 
 ---
 
-So much for a first impression of Service Host. If you want to learn more, check out the reference page.
+So much for a first impression of Service Host. If you want to learn more, check out the [reference](doc/reference.md) page.
