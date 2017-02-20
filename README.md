@@ -1,7 +1,8 @@
 # Service Host
-If you want to make some functionality easily available via HTTP Service Host is here to help.
+If you want to make some functionality code in a .NET language easily available via HTTP, Service Host is here to help.
 You just have to be able to conform to a very simple service contract.
 
+## Defining a Service
 Let's assume you want to publish this via HTTP:
 ```
 class SimpleMath {
@@ -36,7 +37,7 @@ Each entry point states the HTTP method to use and a route, i.e. `/add`. Also it
 input data to come from. Either choose the URL query string (like above) or the HTTP payload (the default). In any case input data is
 delivered as a JSON string. Output data needs also needs to be returned as a JSON string.
 
-In the example above .NET's own JSON (de)serializer is used from the `System.Web.Extensions' assembly. It parses the incoming data into
+In the example above .NET's own JSON (de)serializer is used from the `System.Web.Extensions` assembly. It parses the incoming data into
 an `AddRequest` object and nicely serializes the result object. Between clients and service the JSON contract is looking like this:
 ```
 // input
@@ -50,4 +51,49 @@ an `AddRequest` object and nicely serializes the result object. Between clients 
   "Sum": 7
 }
 ```
-ddd
+The respective classes for the service are straightforward:
+```
+public class AddRequest { 
+    public int A { get; set; }
+    public int B { get; set; }
+}
+
+public class AddResult {
+    public int Sum { get; set; }
+}
+```
+
+## Hosting a Service
+Once you have set up an assembly with the service class and the actual functionality to publish, e.g. `demoservice.dll`, you put them in the same directory as the Service Host, e.g.
+```
+demoservice.dll
+demoservice.dll.mdb
+servicehost.contract.dll
+servicehost.contract.dll.mdb
+servicehost.exe
+servicehost.exe.mdb
+Nancy.dll
+Nancy.Hosting.Self.dll
+```
+This is enough for the Service Host to find your service upon start, e.g.
+```
+mono servicehost.exe http://localhost:1234
+```
+In fact Service Host will search all assemblies in its directory for annotated types like above and publish them at the routes given.
+
+### Testing a Service
+To call the service you can use curl:
+```
+$ curl http://localhost:1234/add?A=10&B=4
+{"Sum":14}
+$
+```
+(Please note: Maybe you have to escape the `&` with a `\` or some other character.)
+
+Or you use a tool like [Postman](https://www.getpostman.com): 
+
+![](images/postman-get-querystring.png)
+
+---
+
+So much for a first impression of Service Host. If you want to learn more, check out the reference page.
