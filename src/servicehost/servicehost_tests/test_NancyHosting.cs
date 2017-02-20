@@ -13,7 +13,7 @@ namespace servicehost_tests
     [TestFixture]
     public class test_NancyHosting
     {
-        [Test, Explicit]
+        [Test]
         public void Start_request_stop()
         {
             using (var sut = new NancyHosting())
@@ -29,7 +29,7 @@ namespace servicehost_tests
             }
         }
 
-        [Test, Explicit]
+        [Test]
         public void Host_hard_coded_service() { 
             using (var sut = new NancyHosting())
             {
@@ -55,7 +55,7 @@ namespace servicehost_tests
             }
         }
 
-        [Test, Explicit]
+        [Test]
         public void Host_hard_coded_service_with_setup_and_teardown()
         {
             using (var sut = new NancyHosting())
@@ -86,7 +86,7 @@ namespace servicehost_tests
         }
 
 
-        [Test, Explicit]
+        [Test]
         public void Host_hard_coded_service_with_exception()
         {
             using (var sut = new NancyHosting())
