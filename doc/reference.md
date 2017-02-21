@@ -49,7 +49,7 @@ http://localhost:1234/add?A=3&B=4
 }
 ```
 
-Input to the as well as return value (output) from the entrypoint are JSON strings.
+Input to the as well as return value (output) from the entrypoint are JSON strings. Hence the signature of an entrypoint function must be `string f(string input)`.
 
 ### [Setup] Attribute
 If you want something to happen _before_ an entrypoint is called by Service Host you can provide a public method annotated with the `[Setup]` attribute. It will be run right before the entry point method.

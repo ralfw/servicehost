@@ -33,6 +33,8 @@
   <ItemGroup>
     <Compile Include="SimpleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Math.cs" />
+    <Compile Include="MonteCarloForecast.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\servicehost.contract\servicehost.contract.csproj">

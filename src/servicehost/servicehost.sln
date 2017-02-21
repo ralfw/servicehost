@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "servicehost_tests", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demoservice", "demoservice\demoservice.csproj", "{85B85E4F-99A6-4174-A770-9DE650B1CC47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "democlient", "democlient\democlient.csproj", "{B855FB82-A43C-4CAD-B30C-223ACCA2935A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -45,6 +47,10 @@ Global
 		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Debug|x86.Build.0 = Debug|Any CPU
 		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Release|x86.ActiveCfg = Release|Any CPU
 		{85B85E4F-99A6-4174-A770-9DE650B1CC47}.Release|x86.Build.0 = Release|Any CPU
+		{B855FB82-A43C-4CAD-B30C-223ACCA2935A}.Debug|x86.ActiveCfg = Debug|x86
+		{B855FB82-A43C-4CAD-B30C-223ACCA2935A}.Debug|x86.Build.0 = Debug|x86
+		{B855FB82-A43C-4CAD-B30C-223ACCA2935A}.Release|x86.ActiveCfg = Release|x86
+		{B855FB82-A43C-4CAD-B30C-223ACCA2935A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D61247D-E144-4B19-A4CF-AE7746BA7435} = {E04CE084-A752-46D8-B301-DFD657C1D588}
