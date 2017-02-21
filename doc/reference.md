@@ -118,7 +118,7 @@ using(var host = new ServiceHost()) {
 }
 ```
 
-In case cannot wrap the Service Host instance with a `using` you should call `Stop()` at the end:
+In case you cannot wrap the Service Host instance with a `using` you should call `Stop()` at the end:
 
 ```
 using servicehost;
