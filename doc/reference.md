@@ -199,3 +199,14 @@ catch (WebException webex) {
       ...
 }
 ```
+
+## Static Content
+Service Host does not just provide access to hosted service logic but also to static content like HTML pages or images.
+
+Static content just needs to be stored in a directory called `content` in the Service Host folder. When a service is accessed via `http://localhost:1234/add` then static content can be reached like so: `http://localhost:1234/content/helloworld.html`.
+
+Check out the demo client:
+
+* In the demo client folder start the Service Host: `mono servicehost.exe http://localhost:1234`
+* Open your browser and point it to `http://localhost:1234/content/addition.html`
+* Enter two numbers to add and hit the button. The page will access a service coming with the demo client at `http://localhost:1234/add` and display the result.

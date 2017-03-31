@@ -1,4 +1,5 @@
 ﻿using System;
+using servicehost;
 
 namespace servicehost_tests
 {
@@ -6,7 +7,14 @@ namespace servicehost_tests
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var servicehost = new ServiceHost())
+            {
+                servicehost.Start(new Uri("http://localhost:1234"));
+
+                Console.WriteLine("Service host running @ localhost:1234...");
+                Console.WriteLine("Hit ENTER to exit");
+                Console.ReadLine();
+            }
         }
     }
 }

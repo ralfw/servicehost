@@ -1,0 +1,23 @@
+﻿<html>
+<head>
+<script src="/content/jquery-3.2.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#RequestAddition").click(function(){
+		a = $("#A").val();
+        b = $("#B").val();
+
+        $.get("/add?a=" + a + "&b=" + b, function(data, status){
+            $("#Result").html(data.Sum);
+        });
+    });
+});
+</script>
+</head>
+<body>
+A: <input type="text" id="A"><br>
+B: <input type="text" id="B"><br>
+<input type="button" id="RequestAddition" value="Add"><br>
+Result: <b id="Result">???</b>
+</body>
+</html>

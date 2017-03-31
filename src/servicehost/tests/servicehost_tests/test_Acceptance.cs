@@ -7,6 +7,7 @@ using servicehost;
 using servicehost.nonpublic;
 using servicehost.nancy;
 using RestSharp;
+using System.IO;
 
 namespace servicehost_tests
 {
@@ -34,9 +35,15 @@ namespace servicehost_tests
                 sut.Start(endpoint);
 
                 // plain WebClient
+                Console.WriteLine("GET");
                 var cli = new WebClient();
+                var result = cli.DownloadString("http://localhost:1234/reverse?Text=hello");
+                Console.WriteLine(result);
+
+                // plain WebClient
+                Console.WriteLine("POST");
                 cli.Headers.Add("Content-Type", "application/json");
-                var result = cli.UploadString("http://localhost:1234/add", "Post", "{\"A\":3, \"B\":4}");
+                result = cli.UploadString("http://localhost:1234/add", "Post", "{\"A\":3, \"B\":4}");
                 Console.WriteLine(result);
 
                 // RestSharp
@@ -47,6 +54,25 @@ namespace servicehost_tests
 
                 IRestResponse<AddResult> response = client.Execute<AddResult>(request);
                 Assert.AreEqual(5, response.Data.result);
+            }
+        }
+
+        [Test]
+        public void Serve_static_content() {
+            const string ENDPOINT = "http://localhost:1234";
+            const string RESULT_FILENAME = "result.txt";
+
+            using (var sut = new ServiceHost())
+            {
+                var endpoint = new Uri(ENDPOINT);
+                sut.Start(endpoint);
+                File.Delete(RESULT_FILENAME);
+
+                var cli = new WebClient();
+                cli.DownloadFile(ENDPOINT + "/content/helloworld.html", RESULT_FILENAME);
+
+                var result = File.ReadAllText(RESULT_FILENAME);
+                Assert.AreEqual("<html><body>Hello, World!</body></html>", result);
             }
         }
     }

@@ -4,7 +4,6 @@ using servicehost.nancy;
 
 namespace servicehost
 {
-
     public class ServiceHost : IDisposable
     {
         NancyHosting nancyHost;
