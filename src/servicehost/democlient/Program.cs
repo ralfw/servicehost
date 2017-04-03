@@ -14,6 +14,9 @@ namespace democlient
 
                 Call_math_service();
                 Call_forecasting_service();
+
+                Console.Write("Press ENTER to terminate program: ");
+                Console.ReadLine();
             }
         }
 

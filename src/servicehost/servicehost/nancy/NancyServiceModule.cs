@@ -26,8 +26,11 @@ namespace servicehost.nonpublic.nancy
                 {
                     var input = Get_input(service.InputSource);
                     var handler = new ServiceAdapter(service.ServiceType, service.EntryPointMethodname, service.SetupMethodname, service.TeardownMethodname);
+
                     var output = handler.Execute(input);
-                    return Response.AsText(output, "application/json");
+
+                    var response = Response.AsText(output, "application/json");
+                    return Enable_CORS(response);
                 }
                 catch (Exception ex) {
                     var resp = (Response)($"ServiceHost: Service request could not be handled! Exception: {ex}");
@@ -64,6 +67,13 @@ namespace servicehost.nonpublic.nancy
                 default:
                     return new Nancy.Json.JavaScriptSerializer().Serialize((IDictionary<string, object>)this.Request.Query);
             }
+        }
+
+        Response Enable_CORS(Response response) {
+            var origin = Request.Headers["Origin"].FirstOrDefault();
+            if (origin != null)
+                response.Headers.Add("Access-Control-Allow-Origin", origin);
+            return response;
         }
     }
 }
