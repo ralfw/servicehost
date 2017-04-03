@@ -31,14 +31,18 @@ namespace demoservice
     {
         [EntryPoint(HttpMethods.Get, "/add", InputSources.Querystring)]
         public string Add(string input) {
-            var json = new JavaScriptSerializer();
+            var json = new JavaScriptSerializer(); 
             AddRequest req = json.Deserialize<AddRequest>(input);
+            Console.WriteLine("add: {0}, {1}", req.A, req.B);
 
             var simplemath = new Math();
-            var sum = simplemath.Add(req.A, req.B);
+            var sum = simplemath.Add(req.A, req.B); 
 
             var result = new AddResult { Sum = sum };
-            return json.Serialize(result);
+
+            var jsonText = json.Serialize(result);
+            Console.WriteLine("  returning: {0}", jsonText);
+            return jsonText;
         }
 
         [EntryPoint(HttpMethods.Post, "/forecast")]

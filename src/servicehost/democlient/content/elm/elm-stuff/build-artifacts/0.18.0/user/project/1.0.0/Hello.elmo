@@ -1,0 +1,22 @@
+var _user$project$Hello$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Hello$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
+var _user$project$Hello$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(model),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Hello$init = {ctor: '_Tuple2', _0: 'Hello', _1: _elm_lang$core$Platform_Cmd$none};
+var _user$project$Hello$main = _elm_lang$html$Html$program(
+	{init: _user$project$Hello$init, view: _user$project$Hello$view, update: _user$project$Hello$update, subscriptions: _user$project$Hello$subscriptions})();
+var _user$project$Hello$NoOp = {ctor: 'NoOp'};
