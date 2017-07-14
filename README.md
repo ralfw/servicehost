@@ -11,6 +11,7 @@ class SimpleMath {
 ```
 With Service Host you'd write a small wrapper class, a service:
 ```
+using System.Web.Script.Serialization; // from System.Web.Extensions.dll
 using servicehost.contract;
 
 [Service]

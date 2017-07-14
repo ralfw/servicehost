@@ -45,7 +45,7 @@ namespace demoservice
             return jsonText;
         }
 
-        [EntryPoint(HttpMethods.Post, "/forecast")]
+        [EntryPoint(HttpMethods.Post, "/forecast", InputSources.Payload)]
         public string Forecast(string input) { 
             var json = new JavaScriptSerializer();
             SimulationRequest req = json.Deserialize<SimulationRequest>(input);

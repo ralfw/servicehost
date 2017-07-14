@@ -19,11 +19,18 @@ namespace myservice
 
         [EntryPoint(HttpMethods.Get, "/echo", InputSources.Querystring)]
         public string Echo(string input) {
-            Console.WriteLine("MyService.Echo");
+            Console.WriteLine("MyService.Echo: {0}", input);
             return input.Replace("$datetime", DateTime.Now.ToString());
         }
 
-        [EntryPoint(HttpMethods.Get, "/reflection")]
+        [EntryPoint(HttpMethods.Get, "/now", InputSources.None)]
+        public string Now(string input)
+        {
+            Console.WriteLine("MyService.Now");
+            return "{\"now\":\"$datetime\"}".Replace("$datetime", DateTime.Now.ToString());
+        }
+
+        [EntryPoint(HttpMethods.Get, "/reflection", InputSources.Payload)]
         public string JsonDeser(string input)
         {
             Console.WriteLine("MyService.JsonDeser");

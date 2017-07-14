@@ -36,7 +36,7 @@ The `[EntryPoint]` attribute has three parameters:
 
 * First you have to specify the HTTP method to use by clients to reach the entrypoint. Chosse `HttpMethods.Get` or `HttpMethods.Post` or `HttpMethods.Put` or `HttpMethods.Delete`.
 * Second you have to state the URL route specific to the entrypoint. Upon calling the service it has to be appended to the Service Host URI, e.g. `http://localhost:1234/add`. The routes of all entrypoints per HTTP method on all service classes have to be distinct.
-* Third you can optionally specify where the input data should be read from. The default is `InputSources.Payload` meaning it's taken from the HTTP payload (requiring a Content-Type of "application/json"). But for simple parameters to the entrypoint you can alternatively use the URL querystring (`InputSources.Querystring`). Each querystring name/value pair will become a separate entry in the input JSON, e.g.
+* Third you need to specify where the input data should be read from. `InputSources.Payload` means it's taken from the HTTP payload (requiring a Content-Type of "application/json"). But for simple parameters to the entrypoint you can alternatively use the URL querystring (`InputSources.Querystring`). Each querystring name/value pair will become a separate entry in the input JSON, e.g.
 
 ```
 http://localhost:1234/add?A=3&B=4
@@ -49,7 +49,9 @@ http://localhost:1234/add?A=3&B=4
 }
 ```
 
-Input to the as well as return value (output) from the entrypoint are JSON strings. Hence the signature of an entrypoint function must be `string f(string input)`.
+Input to the entrypoint as well as its value (output) are JSON strings. Hence the signature of an entrypoint function must be `string f(string input)`.
+
+If an entrypoint does not expect any input data, use `InputSources.Querystring`.
 
 ### [Setup] Attribute
 If you want something to happen _before_ an entrypoint is called by Service Host you can provide a public method annotated with the `[Setup]` attribute. It will be run right before the entry point method.
@@ -168,10 +170,10 @@ public class SimpleService {
 }
 
 // Client
- var cli = new WebClient();
- cli.Headers.Add("Content-Type", "application/json");
- var input = "{\"A\":3, \"B\":4}";
- var output = cli.UploadString("http://localhost:1234/add", "Get", input);
+var cli = new WebClient();
+cli.Headers.Add("Content-Type", "application/json");
+var input = "{\"A\":3, \"B\":4}";
+var output = cli.UploadString("http://localhost:1234/add", "Get", input);
 ```
 
 Make sure to set the `Content-Type` to `application/json` and provide the right HTTP method with the call to `UploadString()`.

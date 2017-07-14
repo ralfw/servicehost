@@ -11,7 +11,8 @@ namespace servicehost.contract
 
     public enum InputSources { 
         Payload,
-        Querystring
+        Querystring,
+        None
     }
 
     [AttributeUsage(AttributeTargets.Method)]
@@ -20,7 +21,7 @@ namespace servicehost.contract
         public string HttpRoute { get; }
         public InputSources InputSource { get; }
 
-        public EntryPointAttribute(HttpMethods httpMethod, string httpRoute, InputSources inputSource = InputSources.Payload) {
+        public EntryPointAttribute(HttpMethods httpMethod, string httpRoute, InputSources inputSource) {
             HttpMethod = httpMethod;
             HttpRoute = httpRoute;
             InputSource = inputSource;

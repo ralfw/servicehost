@@ -35,15 +35,25 @@ namespace servicehost_tests
                 sut.Start(endpoint);
 
                 // plain WebClient
-                Console.WriteLine("GET");
+                Console.WriteLine("GET reverse");
                 var cli = new WebClient();
                 var result = cli.DownloadString("http://localhost:1234/reverse?Text=hello");
                 Console.WriteLine(result);
 
                 // plain WebClient
-                Console.WriteLine("POST");
+                Console.WriteLine("POST add");
                 cli.Headers.Add("Content-Type", "application/json");
                 result = cli.UploadString("http://localhost:1234/add", "Post", "{\"A\":3, \"B\":4}");
+                Console.WriteLine(result);
+
+                // plain WebClient
+                Console.WriteLine("GET now");
+                result = cli.DownloadString("http://localhost:1234/now");
+                Console.WriteLine(result);
+
+                // plain WebClient
+                Console.WriteLine("GET echo");
+                result = cli.DownloadString("http://localhost:1234/echo?ping=$datetime");
                 Console.WriteLine(result);
 
                 // RestSharp

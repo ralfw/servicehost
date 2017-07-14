@@ -17,7 +17,7 @@ namespace myservice
     [Service]
     public class YourService
     {
-        [EntryPoint(HttpMethods.Post, "/add")]
+        [EntryPoint(HttpMethods.Post, "/add", InputSources.Payload)]
         public string Add(string input)
         {
             Console.WriteLine("YourService.Add");

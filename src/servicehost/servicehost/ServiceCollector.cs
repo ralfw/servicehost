@@ -13,6 +13,7 @@ namespace servicehost
         public IEnumerable<ServiceInfo> Collect()
         {
             var assemblies = Collect_assemblies().ToArray();
+            //foreach (var a in assemblies) Console.WriteLine($"assembly found: {a.FullName}");
             var types = Collect_types(assemblies).ToArray();
             return Compile_services(types);
         }
@@ -75,6 +76,7 @@ namespace servicehost
             switch (inputSource) {
                 case servicehost.contract.InputSources.Payload: return servicehost.nonpublic.InputSources.Payload;
                 case servicehost.contract.InputSources.Querystring:
+                case servicehost.contract.InputSources.None:
                 default: return servicehost.nonpublic.InputSources.Querystring;
             }
         }
