@@ -15,7 +15,7 @@ public class SimpleService {
 
 This attribute like all the others is define in `servicehost.contract.dll`.
 
-Upon start Service Host will check all assemblies in the current directory for classes with this attribute and make their entrypoints accessible via HTTP.
+Upon start Service Host will check all assemblies with the extension `.dll` in the current directory for classes with this attribute and make their entrypoints accessible via HTTP.
 
 ### [EntryPoint] Attribute
 The actual service to be published is a function labled with the `[EntryPoint]` attribute. There can be any number of service functions in a service class.

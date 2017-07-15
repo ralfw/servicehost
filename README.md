@@ -30,16 +30,16 @@ public class SimpleService
     }
 }
 ```
-The class is labled as a service by putting the `[Service]` attribute on it.
+The class is labeled as a service by putting the `[Service]` attribute on it.
 This attribute like the others is defined in `servicehost.contract.dll` which you need to reference from your service assembly.
 
-Public methods you want to make accessible via HTTP as a service then need to be labled as entry points, again with an attribute.
+Public methods you want to make accessible via HTTP as a service then need to be labeled as entry points, again with an attribute.
 Each entry point states the HTTP method to use (e.g. `GET`) and a route, e.g. `/add`. Also it needs to tell Service Host where it expects any
 input data to come from. Either choose the URL query string (like above) or the HTTP payload (the default). In any case input data is
 delivered as a JSON string. Output data needs also needs to be returned as a JSON string. It's supposed to be simple service hosting, right?
 
-In the example above .NET's own JSON (de)serializer is used from the `System.Web.Extensions` assembly. It parses the incoming data into
-an `AddRequest` object and nicely serializes the result object. Between clients and service the JSON contract is looking like this:
+In the example above .NET's own JSON (de)serialiser is used from the `System.Web.Extensions` assembly. It parses the incoming data into
+an `AddRequest` object and nicely serialises the result object. Between clients and service the JSON contract is looking like this:
 ```
 // input
 {
@@ -80,7 +80,7 @@ This is enough for the Service Host to find your service upon start, e.g.
 ```
 mono servicehost.exe http://localhost:1234
 ```
-In fact Service Host will search all assemblies in its directory for annotated types like above and publish them at the routes given.
+In fact Service Host will search all assemblies with the extension `.dll` in its directory for annotated types like above and publish them at the routes given.
 
 ### Testing a Service
 To call the service you can use curl:
