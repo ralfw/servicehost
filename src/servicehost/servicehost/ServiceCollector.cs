@@ -20,7 +20,9 @@ namespace servicehost
 
         IEnumerable<Assembly> Collect_assemblies()
         {
-            var assemblyFilenames = Directory.GetFiles(".", "*.dll");
+            var currentAssembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
+			var currentAssemblyPath = Path.GetDirectoryName(currentAssembly).Replace("file:", "");
+            var assemblyFilenames = Directory.GetFiles(currentAssemblyPath, "*.dll").Concat(Directory.GetFiles(".", "*.dll"));
             foreach (var f in assemblyFilenames)
                 yield return Assembly.LoadFrom(f);
         }
@@ -66,7 +68,7 @@ namespace servicehost
                 case servicehost.contract.HttpMethods.Post: return servicehost.nonpublic.HttpMethods.Post;
                 case servicehost.contract.HttpMethods.Put: return servicehost.nonpublic.HttpMethods.Put;
                 case servicehost.contract.HttpMethods.Delete: return servicehost.nonpublic.HttpMethods.Delete;
-                case servicehost.contract.HttpMethods.Get: 
+                case servicehost.contract.HttpMethods.Get:
                 default: return servicehost.nonpublic.HttpMethods.Get;
             }
         }
@@ -81,7 +83,7 @@ namespace servicehost
             }
         }
 
-        string Get_scaffolding_method(Type serviceType, Type scaffoldingAttributteType) { 
+        string Get_scaffolding_method(Type serviceType, Type scaffoldingAttributteType) {
             var method = serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                                     .FirstOrDefault(m => m.GetCustomAttribute(scaffoldingAttributteType) != null);
             return method != null ? method.Name : null;
