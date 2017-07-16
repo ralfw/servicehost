@@ -54,7 +54,7 @@ an `AddRequest` object and nicely serialises the result object. Between clients 
 ```
 The respective message classes for the service are straightforward:
 ```
-public class AddRequest { 
+public class AddRequest {
     public int A { get; set; }
     public int B { get; set; }
 }
@@ -91,10 +91,35 @@ $
 ```
 (Please note: Maybe you have to escape the `&` with a `\` or some other character.)
 
-Or you use a tool like [Postman](https://www.getpostman.com): 
+Or you use a tool like [Postman](https://www.getpostman.com):
 
 ![](images/postman-get-querystring.png)
 
 ---
 
 So much for a first impression of Service Host. If you want to learn more, check out the [reference](doc/reference.md) page.
+
+### Deploy a Service
+
+To deploy the service to the cloud with [dropstack](https://dropstack.run) just enter:
+
+#### Setup
+
+```bash
+npm i -g dropstack-cli
+```
+
+#### Login
+
+```bash
+dropstack login
+```
+
+#### Build & Deploy
+
+> For [Mono .Net-Framework](http://www.mono-project.com/) applications [dropstack](https://dropstack.run) tries to find a [build.sh](src/servicehost/build.sh) and [start.sh](src/servicehost/start.sh)
+
+```bash
+cd src/servicehost
+dropstack deploy
+```
