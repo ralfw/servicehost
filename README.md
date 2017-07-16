@@ -98,28 +98,3 @@ Or you use a tool like [Postman](https://www.getpostman.com):
 ---
 
 So much for a first impression of Service Host. If you want to learn more, check out the [reference](doc/reference.md) page.
-
-### Deploy a Service
-
-To deploy the service to the cloud with [dropstack](https://dropstack.run) just enter:
-
-#### Setup
-
-```bash
-npm i -g dropstack-cli
-```
-
-#### Login
-
-```bash
-dropstack login
-```
-
-#### Build & Deploy
-
-> For [Mono .Net-Framework](http://www.mono-project.com/) applications [dropstack](https://dropstack.run) tries to find a [build.sh](src/servicehost/build.sh) and [start.sh](src/servicehost/start.sh)
-
-```bash
-cd src/servicehost
-dropstack deploy
-```

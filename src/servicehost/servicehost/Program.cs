@@ -12,16 +12,14 @@ namespace servicehost
             using (var servicehost = new ServiceHost())
             {
                 servicehost.Start(cli.Endpoint);
+                Console.WriteLine("Service host running on {0}...", cli.Endpoint.ToString());
 
-                Console.WriteLine("Service host running on " + cli.Endpoint.ToString());
-
-                if (IsRunningOnMono())
-                {
-                    var terminationSignals = GetUnixTerminationSignals();
-                    UnixSignal.WaitAny(terminationSignals);
+                if (Is_running_on_Mono) {
+                    Console.WriteLine("Ctrl-C to stop service host");
+                    UnixSignal.WaitAny(UnixTerminationSignals);
                 }
-                else
-                {
+                else {
+                    Console.WriteLine("ENTER to stop service host");
                     Console.ReadLine();
                 }
 
@@ -30,20 +28,13 @@ namespace servicehost
             }
         }
 
-        private static bool IsRunningOnMono()
-        {
-            return Type.GetType("Mono.Runtime") != null;
-        }
+        private static bool Is_running_on_Mono => Type.GetType("Mono.Runtime") != null;
 
-        private static UnixSignal[] GetUnixTerminationSignals()
-        {
-            return new[]
-            {
-              new UnixSignal(Signum.SIGINT),
-              new UnixSignal(Signum.SIGTERM),
-              new UnixSignal(Signum.SIGQUIT),
-              new UnixSignal(Signum.SIGHUP)
-            };
-        }
+        private static UnixSignal[] UnixTerminationSignals =>  new[] {
+			new UnixSignal(Signum.SIGINT),
+			new UnixSignal(Signum.SIGTERM),
+			new UnixSignal(Signum.SIGQUIT),
+			new UnixSignal(Signum.SIGHUP)
+		};
     }
 }
