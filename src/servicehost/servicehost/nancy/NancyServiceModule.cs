@@ -63,27 +63,38 @@ namespace servicehost.nonpublic.nancy
 
         object Get_input_from_param(Nancy.DynamicDictionary routeParams, Nancy.DynamicDictionary querystringParams, ServiceParameter param) {
             if (param.IsPayload) {
-                if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
-                    throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
-
                 if (param.Type == typeof(string))
                     return this.Request.Body.AsString();
                 else {
+                    if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
+                        throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
+                    
                     var payloadJson = this.Request.Body.AsString();
                     return new JavaScriptSerializer().Deserialize(payloadJson, param.Type);
                 }
             }
-            //TODO: string nach Type mappen
             else if (Is_in(routeParams)) {
-                return routeParams[param.Name].ToString();
+                return Parse(routeParams[param.Name].ToString());
             }
             else if (Is_in(querystringParams)) {
-                return querystringParams[param.Name].ToString();
+                return Parse(querystringParams[param.Name].ToString());
             }
             throw new InvalidOperationException($"Parameter not found in route or query string: {param.Name}!");
 
 
             bool Is_in(Nancy.DynamicDictionary paramList) => paramList.ContainsKey(param.Name);
+
+            object Parse(string data) {
+                if (param.Type == typeof(string))
+                    return data;
+                else if (param.Type == typeof(Guid)) {
+                    return new Guid(data);
+                }
+                else {
+                    var json = new JavaScriptSerializer();
+                    return json.Deserialize(data, param.Type);
+                }
+            }
         }
 
 

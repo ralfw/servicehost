@@ -44,6 +44,13 @@ namespace myservice
         public void Deafmute() {
             Console.WriteLine("MyService.Deafmute");
         }
+
+        // Usage: GET /paramtypes?s=hello&i=42&b=true&d=3.14&f=3.1415&de=3.141592&i32=99&id=a1f5ca8a-9fed-498c-9cb7-a5627c49e779
+        [EntryPoint(HttpMethods.Get, "/paramtypes")]
+        public void ParamTypes(string s, int i, bool b, double d, float f, decimal de, Int32 i32, Guid id) {
+            Console.WriteLine("MyService.ParamTypes");
+            Console.WriteLine($"s:{s}, i:{i}, b:{b}, d:{d}, f:{f}, de:{de}, i32:{i32}, id:{id}");
+        }
     }
 
 

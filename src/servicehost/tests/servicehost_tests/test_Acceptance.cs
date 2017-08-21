@@ -76,6 +76,24 @@ namespace servicehost_tests
 
 
         [Test]
+        public void Param_type_mapping()
+        {
+            Console.WriteLine("---Start call stop---");
+
+            using (var sut = new ServiceHost())
+            {
+                var endpoint = new Uri("http://localhost:1234");
+                sut.Start(endpoint);
+
+                // plain WebClient (yourservice)
+                Console.WriteLine("GET paramtypes");
+                var cli = new WebClient();
+                cli.DownloadString("http://localhost:1234//paramtypes?s=hello&i=42&b=true&d=3.14&f=3.1415&de=3.141592&i32=99&id=a1f5ca8a-9fed-498c-9cb7-a5627c49e779");
+            }
+        }
+
+
+        [Test]
         public void Serve_static_content() {
             const string ENDPOINT = "http://localhost:1234";
             const string RESULT_FILENAME = "result.txt";
