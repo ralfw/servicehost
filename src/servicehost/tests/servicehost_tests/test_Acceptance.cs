@@ -52,6 +52,11 @@ namespace servicehost_tests
                 Console.WriteLine(result);
 
                 // plain WebClient (myservice)
+                Console.WriteLine("GET deafmute");
+                result = cli.DownloadString("http://localhost:1234/deafmute");
+                Console.WriteLine("deafmute result: <{0}>", result);
+
+                // plain WebClient (myservice)
                 Console.WriteLine("GET echo");
                 result = cli.DownloadString("http://localhost:1234/echo?ping=$datetime");
                 Console.WriteLine(result);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web.Routing;
 using Nancy;
 using Nancy.Extensions;
 
@@ -22,14 +23,13 @@ namespace servicehost.nonpublic.nancy
 
         Func<dynamic, dynamic> Create_handler(ServiceInfo service) {
             return (dynamic param) => {
-                try
-                {
-                    var input = Get_input(service.InputSource);
-                    var handler = new ServiceAdapter(service.ServiceType, service.EntryPointMethodname, service.SetupMethodname, service.TeardownMethodname);
+                try {
+                    var input = Get_input(param);
 
+                    var handler = new ServiceAdapter(service.ServiceType, service.EntryPointMethodname, service.SetupMethodname, service.TeardownMethodname);
                     var output = handler.Execute(input);
 
-                    var response = Response.AsText(output, "application/json");
+                    var response = Produce_output(output);
                     return Enable_CORS(response);
                 }
                 catch (Exception ex) {
@@ -57,17 +57,38 @@ namespace servicehost.nonpublic.nancy
             }
         }
 
-        string Get_input(InputSources source) { 
-            switch (source)
-            {
-                case InputSources.Payload:
-                    if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
-                        throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
-                    return this.Request.Body.AsString();
-                default:
-                    return new Nancy.Json.JavaScriptSerializer().Serialize((IDictionary<string, object>)this.Request.Query);
+        object[] Get_input(dynamic param) {
+            throw new NotImplementedException();
+            /*
+            // route prüfen
+            var d = new RouteValueDictionary(param);
+            d.ContainsKey()
+
+            // querystring prüfen
+            this.Request.Query
+
+            // payload holen
+            if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
+                throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
+            this.Request.Body.AsString();
+            */
+        }
+
+
+        Response Produce_output(object obj) {
+            if (obj is string) {
+                var response = (Response)obj;
+                response.ContentType = "text/plain";
+                return response;
+            }
+            else {
+                var objJson = new Nancy.Json.JavaScriptSerializer().Serialize(obj);
+                var response = (Response)objJson;
+                response.ContentType = "application/json";
+                return response;
             }
         }
+
 
         Response Enable_CORS(Response response) {
             var origin = Request.Headers["Origin"].FirstOrDefault();

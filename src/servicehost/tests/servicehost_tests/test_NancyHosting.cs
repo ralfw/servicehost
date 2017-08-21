@@ -41,8 +41,7 @@ namespace servicehost_tests
                         ServiceType = typeof(NancyHostingTestService),
                         EntryPointMethodname = "Echo",
                         Route = "/echo_querystring",
-                        HttpMethod = HttpMethods.Get,
-                        InputSource = InputSources.Querystring
+                        HttpMethod = HttpMethods.Get
                     }
                 });
                 Console.WriteLine("Started with service!");
@@ -71,7 +70,6 @@ namespace servicehost_tests
                         TeardownMethodname = "Cleanup",
                         Route = "/echo_payload",
                         HttpMethod = HttpMethods.Post,
-                        InputSource = InputSources.Payload
                     }
                 });
                 Console.WriteLine("Started with service!");
@@ -99,8 +97,7 @@ namespace servicehost_tests
                         ServiceType = typeof(NancyHostingTestService),
                         EntryPointMethodname = "XYZ",
                         Route = "/echo_querystring",
-                        HttpMethod = HttpMethods.Get,
-                        InputSource = InputSources.Querystring
+                        HttpMethod = HttpMethods.Get
                     }
                 });
                 Console.WriteLine("Started with service!");

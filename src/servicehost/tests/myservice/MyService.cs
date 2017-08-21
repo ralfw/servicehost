@@ -38,9 +38,16 @@ namespace myservice
             payload.Data = payload.Data.Replace("$datetime", DateTime.Now.ToString()) + " - " + id;
             return payload;
         }
+
+        // Usage: GET /deafmute -> ()
+        [EntryPoint(HttpMethods.Get, "/deafmute")]
+        public void Deafmute() {
+            Console.WriteLine("MyService.Deafmute");
+        }
     }
 
+
     public class JsonPayload {
-        public string Data;
+        public string Data { get; set; }
     }
 }

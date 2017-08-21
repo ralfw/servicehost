@@ -3,7 +3,7 @@ using System.Web.Script.Serialization;
 using servicehost.contract;
 using System.Linq;
 
-namespace myservice
+namespace yourservice
 {
     public class AddRequest {
         public int A { get; set; }
