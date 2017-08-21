@@ -21,9 +21,9 @@ namespace servicehost.nonpublic.nancy
             this.instance = Activator.CreateInstance(serviceType);
         }
 
-        public string Execute(string input) {
+        public object Execute(object[] input) {
             Invoke_optionally(this.setupMethodname);
-            var output = (string)Invoke(this.entrypointMethodname, new[] { input });
+            var output = Invoke(this.entrypointMethodname, input);
             Invoke_optionally(this.teardownMethodname);
             return output;
         }

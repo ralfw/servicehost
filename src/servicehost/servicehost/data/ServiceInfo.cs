@@ -11,11 +11,6 @@ namespace servicehost.nonpublic
         Delete
     }
 
-    public enum InputSources { 
-        Payload,
-        Querystring
-    }
-
     public class ServiceInfo {
         public Type ServiceType;
         public string EntryPointMethodname;
@@ -24,6 +19,5 @@ namespace servicehost.nonpublic
 
         public HttpMethods HttpMethod;
         public string Route;
-        public InputSources InputSource;
     }
 }
