@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
+using System.Web.Script.Serialization;
 using Nancy;
 using Nancy.Extensions;
 
@@ -24,7 +25,7 @@ namespace servicehost.nonpublic.nancy
         Func<dynamic, dynamic> Create_handler(ServiceInfo service) {
             return (dynamic param) => {
                 try {
-                    var input = Get_input(param);
+                    var input = Get_input(param, service);
 
                     var handler = new ServiceAdapter(service.ServiceType, service.EntryPointMethodname, service.SetupMethodname, service.TeardownMethodname);
                     var output = handler.Execute(input);
@@ -57,27 +58,40 @@ namespace servicehost.nonpublic.nancy
             }
         }
 
-        object[] Get_input(dynamic param) {
-            throw new NotImplementedException();
-            /*
-            // route prüfen
-            var d = new RouteValueDictionary(param);
-            d.ContainsKey()
+        object[] Get_input(dynamic routeParams, ServiceInfo service) {
+            return service.Parameters.Select(p => Get_input_from_param(routeParams, Request.Query, p))
+                                     .ToArray();
+        }
 
-            // querystring prüfen
-            this.Request.Query
+        object Get_input_from_param(Nancy.DynamicDictionary routeParams, Nancy.DynamicDictionary querystringParams, ServiceParameter param) {
+            if (param.IsPayload) {
+                if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
+                    throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
 
-            // payload holen
-            if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
-                throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
-            this.Request.Body.AsString();
-            */
+                if (param.Type == typeof(string))
+                    return this.Request.Body.AsString();
+                else {
+                    var payloadJson = this.Request.Body.AsString();
+                    return new JavaScriptSerializer().Deserialize(payloadJson, param.Type);
+                }
+            }
+            //TODO: string nach Type mappen
+            else if (Is_in(routeParams)) {
+                return routeParams[param.Name].ToString();
+            }
+            else if (Is_in(querystringParams)) {
+                return querystringParams[param.Name].ToString();
+            }
+            throw new InvalidOperationException($"Parameter not found in route or query string: {param.Name}!");
+
+
+            bool Is_in(Nancy.DynamicDictionary paramList) => paramList.ContainsKey(param.Name);
         }
 
 
         Response Produce_output(object obj) {
             if (obj is string) {
-                var response = (Response)obj;
+                var response = (Response)(obj.ToString());
                 response.ContentType = "text/plain";
                 return response;
             }

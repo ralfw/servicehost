@@ -34,13 +34,10 @@ namespace servicehost.nonpublic.nancy
         }
 
         object Invoke(string methodname, object[] parameters) {
-            if (!string.IsNullOrEmpty(methodname))
-                return this.type.InvokeMember(
-                            methodname,
-                            BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public, null,
-                            this.instance, parameters);
-            else
-                throw new InvalidOperationException($"Cannot find service method '{methodname}' on service '{this.type.Name}'!");
+            return this.type.InvokeMember(
+		                        methodname,
+		                        BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public, null,
+		                        this.instance, parameters);
         }
     }
 }

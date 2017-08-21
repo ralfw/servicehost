@@ -30,6 +30,8 @@ namespace servicehost_tests
 
         [Test]
         public void Start_call_stop() {
+            Console.WriteLine("---Start call stop---");
+
             using (var sut = new ServiceHost()) {
                 var endpoint = new Uri("http://localhost:1234");
                 sut.Start(endpoint);

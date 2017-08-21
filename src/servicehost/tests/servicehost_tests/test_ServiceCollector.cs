@@ -71,6 +71,7 @@ namespace servicehost_tests
             Assert.AreEqual("Arrange", service.SetupMethodname);
             Assert.AreEqual("Cleanup", service.TeardownMethodname);
             Assert.AreEqual("/deafmute", service.Route);
+            Assert.AreEqual(0, service.Parameters.Length);
             Assert.AreSame(service.ResultType, typeof(void));
         }
     }

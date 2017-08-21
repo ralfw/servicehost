@@ -18,8 +18,7 @@ namespace servicehost_tests
         [Test]
         public void Start_request_stop()
         {
-            using (var sut = new NancyHosting())
-            {
+            using (var sut = new NancyHosting()) {
                 Console.WriteLine("Started...");
                 sut.Start(new Uri("http://localhost:1234"), new ServiceInfo[0]);
                 Console.WriteLine("Started!");
@@ -41,17 +40,19 @@ namespace servicehost_tests
                         ServiceType = typeof(NancyHostingTestService),
                         EntryPointMethodname = "Echo",
                         Route = "/echo_querystring",
-                        HttpMethod = HttpMethods.Get
+                        HttpMethod = HttpMethods.Get,
+                        Parameters = new[]{ new ServiceParameter { Name = "ping", Type = typeof(string)}},
+                        ResultType = typeof(string)
                     }
                 });
                 Console.WriteLine("Started with service!");
 
                 var cli = new WebClient();
-                var result = cli.DownloadString("http://localhost:1234/echo_querystring?payload=$data");
+                var result = cli.DownloadString("http://localhost:1234/echo_querystring?ping=$data");
 
                 Console.WriteLine("Called...");
                 Assert.AreEqual(new[] { "handle" }, NancyHostingTestService.Log.ToArray());
-                Assert.AreEqual("{\"payload\":\"42\"}", result.Replace(" ", ""));
+                Assert.AreEqual("42", result);
                 Console.WriteLine("Received: {0}", result);
             }
         }
@@ -69,18 +70,19 @@ namespace servicehost_tests
                         SetupMethodname = "Setup",
                         TeardownMethodname = "Cleanup",
                         Route = "/echo_payload",
-                        HttpMethod = HttpMethods.Post,
+                        HttpMethod = HttpMethods.Get,
+                        Parameters = new[]{ new ServiceParameter { Name = "ping", Type = typeof(string)}},
+                        ResultType = typeof(string)
                     }
                 });
                 Console.WriteLine("Started with service!");
 
                 var cli = new WebClient();
-                cli.Headers.Add("Content-Type", "application/json");
-                var result = cli.UploadString("http://localhost:1234/echo_payload", "Post", "{\"payload\":\"$data\"}");
+                var result = cli.DownloadString("http://localhost:1234/echo_payload?ping=hello");
 
                 Console.WriteLine("Called...");
                 Assert.AreEqual(new[] { "setup", "handle", "cleanup" }, NancyHostingTestService.Log.ToArray());
-                Assert.AreEqual("{\"payload\":\"42\"}", result.Replace(" ", ""));
+                Assert.AreEqual("hello", result);
                 Console.WriteLine("Received: {0}", result);
             }
         }
@@ -105,7 +107,7 @@ namespace servicehost_tests
                 try
                 {
                     var cli = new WebClient();
-                    cli.DownloadString("http://localhost:1234/echo_querystring?payload=$data");
+                    cli.DownloadString("http://localhost:1234/echo_querystring?ping=$data");
                 }
                 catch (WebException webex) {
                     var resp = (HttpWebResponse)webex.Response;
@@ -138,9 +140,9 @@ namespace servicehost_tests
 
         public void Setup() { Log.Add("setup"); }
         public void Cleanup() { Log.Add("cleanup"); }
-        public string Echo(string json) {
+        public string Echo(string ping) {
             Log.Add("handle");
-            return json.Replace("$data", "42");
+            return ping.Replace("$data", "42");
         }
     }
 }
