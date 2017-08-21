@@ -9,22 +9,16 @@ namespace servicehost.contract
         Delete
     }
 
-    public enum InputSources { 
-        Payload,
-        Querystring,
-        None
-    }
 
     [AttributeUsage(AttributeTargets.Method)]
     public class EntryPointAttribute : Attribute {
         public HttpMethods HttpMethod { get; }
         public string HttpRoute { get; }
-        public InputSources InputSource { get; }
 
-        public EntryPointAttribute(HttpMethods httpMethod, string httpRoute, InputSources inputSource) {
+        public EntryPointAttribute(HttpMethods httpMethod, string httpRoute)
+        {
             HttpMethod = httpMethod;
             HttpRoute = httpRoute;
-            InputSource = inputSource;
         }
     }
 }

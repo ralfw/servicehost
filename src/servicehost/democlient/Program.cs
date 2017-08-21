@@ -36,7 +36,7 @@ namespace democlient
         static void Call_forecasting_service()
         {
             var rest = new RestClient("http://localhost:1234");
-            var req = new RestRequest("/forecast", Method.POST); // needs to be POST for RestSharp to send JSON in payload
+            var req = new RestRequest("/forecast/42", Method.POST); // needs to be POST for RestSharp to send JSON in payload
             req.RequestFormat = DataFormat.Json;
             var simReq = new SimulationRequest {
                 HistoricalData = new[] { 1, 7, 9, 3, 4, 4, 8, 2, 5, 9, 6, 3, 2, 5, 6, 3, 1, 5, 4, 7, 8, 3, 6, 2 },
