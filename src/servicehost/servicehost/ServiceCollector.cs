@@ -54,7 +54,6 @@ namespace servicehost
             var attr = method.GetCustomAttribute<EntryPointAttribute>();
             service.Route = attr.HttpRoute;
             service.HttpMethod = MapHttpMethod(attr.HttpMethod);
-            service.InputSource = MapInputSource(attr.InputSource);
 
             service.SetupMethodname = Get_scaffolding_method(method.ReflectedType, typeof(servicehost.contract.SetupAttribute));
             service.TeardownMethodname = Get_scaffolding_method(method.ReflectedType, typeof(servicehost.contract.TeardownAttribute));
@@ -73,15 +72,6 @@ namespace servicehost
             }
         }
 
-        servicehost.nonpublic.InputSources MapInputSource(servicehost.contract.InputSources inputSource)
-        {
-            switch (inputSource) {
-                case servicehost.contract.InputSources.Payload: return servicehost.nonpublic.InputSources.Payload;
-                case servicehost.contract.InputSources.Querystring:
-                case servicehost.contract.InputSources.None:
-                default: return servicehost.nonpublic.InputSources.Querystring;
-            }
-        }
 
         string Get_scaffolding_method(Type serviceType, Type scaffoldingAttributteType) {
             var method = serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
