@@ -1,5 +1,4 @@
 #!/bin/bash
 rm servicehost*.nupkg
 mono ../lib/nuget.exe pack ../src/servicehost/servicehost/servicehost.csproj
-mono ../lib/nuget.exe setApiKey $nugetApiKey
-mono ../lib/nuget.exe push servicehost*.nupkg -Source https://www.nuget.org/api/v2/package
+nuget push servicehost*.nupkg $nugetApiKey -Source https://www.nuget.org/api/v2/package
