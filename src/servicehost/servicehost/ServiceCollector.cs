@@ -45,8 +45,7 @@ namespace servicehost
                        .Where(m => m.GetCustomAttribute<EntryPointAttribute>() != null);
         }
 
-        ServiceInfo Compile_service(MethodInfo method)
-        {
+        ServiceInfo Compile_service(MethodInfo method) {
             var service = new ServiceInfo();
             service.ServiceType = method.ReflectedType;
             service.EntryPointMethodname = method.Name;
@@ -54,10 +53,12 @@ namespace servicehost
             var attr = method.GetCustomAttribute<EntryPointAttribute>();
             service.Route = attr.HttpRoute;
             service.HttpMethod = MapHttpMethod(attr.HttpMethod);
-            service.InputSource = MapInputSource(attr.InputSource);
 
             service.SetupMethodname = Get_scaffolding_method(method.ReflectedType, typeof(servicehost.contract.SetupAttribute));
             service.TeardownMethodname = Get_scaffolding_method(method.ReflectedType, typeof(servicehost.contract.TeardownAttribute));
+
+            service.Parameters = Compile_service_parameters(method);
+            service.ResultType = method.ReturnType;
 
             return service;
         }
@@ -73,20 +74,25 @@ namespace servicehost
             }
         }
 
-        servicehost.nonpublic.InputSources MapInputSource(servicehost.contract.InputSources inputSource)
-        {
-            switch (inputSource) {
-                case servicehost.contract.InputSources.Payload: return servicehost.nonpublic.InputSources.Payload;
-                case servicehost.contract.InputSources.Querystring:
-                case servicehost.contract.InputSources.None:
-                default: return servicehost.nonpublic.InputSources.Querystring;
-            }
-        }
 
         string Get_scaffolding_method(Type serviceType, Type scaffoldingAttributteType) {
             var method = serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                                     .FirstOrDefault(m => m.GetCustomAttribute(scaffoldingAttributteType) != null);
             return method != null ? method.Name : null;
+        }
+
+
+        ServiceParameter[] Compile_service_parameters(MethodInfo method) {
+            var prms = new List<ServiceParameter>();
+            foreach(var p in method.GetParameters()) {
+                var sp = new ServiceParameter() {
+                    Name = p.Name,
+                    Type = p.ParameterType,
+                    IsPayload = p.GetCustomAttributes().Any(a => a is PayloadAttribute)
+                };
+                prms.Add(sp);
+            }
+            return prms.ToArray();
         }
    }
 }

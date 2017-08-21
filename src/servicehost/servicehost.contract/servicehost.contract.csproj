@@ -35,6 +35,7 @@
     <Compile Include="EntryPointAttribute.cs" />
     <Compile Include="SetupAttribute.cs" />
     <Compile Include="TeardownAttribute.cs" />
+    <Compile Include="PayloadAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

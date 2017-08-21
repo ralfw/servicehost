@@ -29,31 +29,24 @@ namespace demoservice
     [Service]
     public class SimpleService
     {
-        [EntryPoint(HttpMethods.Get, "/add", InputSources.Querystring)]
-        public string Add(string input) {
-            var json = new JavaScriptSerializer(); 
-            AddRequest req = json.Deserialize<AddRequest>(input);
-            Console.WriteLine("add: {0}, {1}", req.A, req.B);
-
+        // Usage: /add?A=1&B=2
+        [EntryPoint(HttpMethods.Get, "/add")]
+        public AddResult Add(int a, int b) {
             var simplemath = new Math();
-            var sum = simplemath.Add(req.A, req.B); 
+            var sum = simplemath.Add(a, b); 
 
-            var result = new AddResult { Sum = sum };
-
-            var jsonText = json.Serialize(result);
-            Console.WriteLine("  returning: {0}", jsonText);
-            return jsonText;
+            return new AddResult { Sum = sum };
         }
 
-        [EntryPoint(HttpMethods.Post, "/forecast", InputSources.Payload)]
-        public string Forecast(string input) { 
-            var json = new JavaScriptSerializer();
-            SimulationRequest req = json.Deserialize<SimulationRequest>(input);
+
+        // Usage: /forcecast/123 + data in payload
+        [EntryPoint(HttpMethods.Post, "/forecast/{id}")]
+        public SimulationResult Forecast(string id, [Payload] SimulationRequest req) { 
+            Console.WriteLine("Forecast requested for {0}", id);
 
             var forecasts = MonteCarloForecast.Simulate(req.HistoricalData, req.NumberOfEvents, req.NumberOfSimulations);
 
-            var result = new SimulationResult { Forecasts = forecasts };
-            return json.Serialize(result);
+            return new SimulationResult { Forecasts = forecasts };
         }
     }
 }

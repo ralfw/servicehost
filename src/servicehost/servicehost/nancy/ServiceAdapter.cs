@@ -21,9 +21,9 @@ namespace servicehost.nonpublic.nancy
             this.instance = Activator.CreateInstance(serviceType);
         }
 
-        public string Execute(string input) {
+        public object Execute(object[] input) {
             Invoke_optionally(this.setupMethodname);
-            var output = (string)Invoke(this.entrypointMethodname, new[] { input });
+            var output = Invoke(this.entrypointMethodname, input);
             Invoke_optionally(this.teardownMethodname);
             return output;
         }
@@ -34,13 +34,10 @@ namespace servicehost.nonpublic.nancy
         }
 
         object Invoke(string methodname, object[] parameters) {
-            if (!string.IsNullOrEmpty(methodname))
-                return this.type.InvokeMember(
-                            methodname,
-                            BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public, null,
-                            this.instance, parameters);
-            else
-                throw new InvalidOperationException($"Cannot find service method '{methodname}' on service '{this.type.Name}'!");
+            return this.type.InvokeMember(
+		                        methodname,
+		                        BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Public, null,
+		                        this.instance, parameters);
         }
     }
 }

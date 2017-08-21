@@ -3,35 +3,36 @@ using System.Web.Script.Serialization;
 using servicehost.contract;
 using System.Linq;
 
-namespace myservice
+namespace yourservice
 {
     public class AddRequest {
-        public int A;
-        public int B;
+        public int A { get; set; }
+        public int B { get; set; }
     }
 
-    public class ReverseRequest { 
-        public string Text;
+    public class AddResult {
+        public int Result {get;set;}
     }
+
 
     [Service]
     public class YourService
     {
-        [EntryPoint(HttpMethods.Post, "/add", InputSources.Payload)]
-        public string Add(string input)
-        {
+        // Usage: POST /add + { "A":1, "B":2 } -> { "Result":3 }
+        [EntryPoint(HttpMethods.Post, "/add")]
+        public AddResult Add([Payload]AddRequest req) {
             Console.WriteLine("YourService.Add");
-            var req = new JavaScriptSerializer().Deserialize<AddRequest>(input);
             var result = req.A + req.B;
-            return "{\"result\": " + result.ToString() + "}";
+            return new AddResult { Result = result };
         }
 
-        [EntryPoint(HttpMethods.Get, "/reverse", InputSources.Querystring)]
-        public string Reverse(string input) {
+
+        // Usage: GET /reverse?text=abc -> "cba"
+        [EntryPoint(HttpMethods.Get, "/reverse")]
+        public string Reverse(string text) {
             Console.WriteLine("YourService.Reverse");
-            var req = new JavaScriptSerializer().Deserialize<ReverseRequest>(input);
-            var result = new string(req.Text.ToCharArray().Reverse().ToArray());
-            return "{\"result\": \"" + result + "\"}";
+            var result = new string(text.ToCharArray().Reverse().ToArray());
+            return result;
         }
     }
 }
