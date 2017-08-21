@@ -15,6 +15,7 @@
     <tags>REST Service NancyFx</tags>
     <references>
       <reference file="servicehost.contract.dll" />
+      <reference file="servicehost.exe" />
     </references>
   </metadata>
   <files>
