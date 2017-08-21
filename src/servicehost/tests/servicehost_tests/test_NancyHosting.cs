@@ -9,6 +9,8 @@ using servicehost.nancy;
 using RestSharp;
 using System.IO;
 using System.Text;
+using Nancy;
+using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace servicehost_tests
 {
@@ -124,7 +126,7 @@ namespace servicehost_tests
         }
     }
 
-    public class NancyHostingTestModule : Nancy.NancyModule
+    public class NancyHostingTestModule : NancyModule
     {
         public NancyHostingTestModule()
         {

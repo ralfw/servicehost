@@ -1,0 +1,9 @@
+Bevor das publish Script aufgerufen werden kann, muss
+der NuGet API Key als Environment Variable abgelegt werden:
+
+export nugetApiKey=12345678-123456-12345678
+
+Anschließend kann das Script gestartet werden mit
+
+./publish
+

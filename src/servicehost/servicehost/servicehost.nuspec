@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Ralf Westphal</authors>
+    <owners>Ralf Westphal</owners>
+    <licenseUrl>http://opensource.org/licenses/BSD-2-Clause</licenseUrl>
+    <projectUrl>https://github.com/ralfw/servicehost</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simple library to package your assembly and publish it as a REST service using NancyFx.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>REST Service NancyFx</tags>
+    <references>
+      <reference file="servicehost.contract.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="../../../bin/servicehost.contract.dll" target="lib/net45"/>
+  </files>
+</package>
