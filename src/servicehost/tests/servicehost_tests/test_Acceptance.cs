@@ -34,29 +34,29 @@ namespace servicehost_tests
                 var endpoint = new Uri("http://localhost:1234");
                 sut.Start(endpoint);
 
-                // plain WebClient
+                // plain WebClient (yourservice)
                 Console.WriteLine("GET reverse");
                 var cli = new WebClient();
                 var result = cli.DownloadString("http://localhost:1234/reverse?Text=hello");
                 Console.WriteLine(result);
 
-                // plain WebClient
+                // plain WebClient (yourservice)
                 Console.WriteLine("POST add");
                 cli.Headers.Add("Content-Type", "application/json");
                 result = cli.UploadString("http://localhost:1234/add", "Post", "{\"A\":3, \"B\":4}");
                 Console.WriteLine(result);
 
-                // plain WebClient
+                // plain WebClient (myservice)
                 Console.WriteLine("GET now");
                 result = cli.DownloadString("http://localhost:1234/now");
                 Console.WriteLine(result);
 
-                // plain WebClient
+                // plain WebClient (myservice)
                 Console.WriteLine("GET echo");
                 result = cli.DownloadString("http://localhost:1234/echo?ping=$datetime");
                 Console.WriteLine(result);
 
-                // RestSharp
+                // RestSharp (yourservice)
                 var client = new RestClient(endpoint);
                 var request = new RestRequest("/add", Method.POST);
                 request.RequestFormat = DataFormat.Json;
@@ -66,6 +66,7 @@ namespace servicehost_tests
                 Assert.AreEqual(5, response.Data.result);
             }
         }
+
 
         [Test]
         public void Serve_static_content() {
