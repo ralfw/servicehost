@@ -65,31 +65,90 @@ public int Add(int a, int b) { ... }
 ...
 
 // Call with
-http://.../add?a=1&b=42
+GET http://.../add?a=1&b=42
 ```
 
 Use the names of the parameters as the names of values in the querystring. This is not case sensitive and the order is not important.
 
-Service Host will make an effort to map the values from the URL string to the parameter types. It recognizes primitive types like `string`, `int`, `bool`, `double`, `float`, `decimal`, and also `Guid`.
+Service Host will make an effort to map the values from the URL string to the parameters' types. It recognizes primitive types like `string`, `int`, `bool`, `double`, `float`, `decimal`, `DateTime`, and also `Guid`. For other types it assumes the value to be a Json and tries to deserialize it. (Which probably is not often needed for querystring parameters.)
 
-
-
-* Third you need to specify where the input data should be read from. `InputSources.Payload` means it's taken from the HTTP payload (requiring a Content-Type of "application/json"). But for simple parameters to the entrypoint you can alternatively use the URL querystring (`InputSources.Querystring`). Each querystring name/value pair will become a separate entry in the input JSON, e.g.
+#### Passing parameter values by route placeholder
+You also can put data into routes. This is a feature of the underlying techology NancyFx. Just wrap their name them in `{}` in the route and replace them upon calling the service with the actual value.
 
 ```
-http://localhost:1234/add?A=3&B=4
+// Service
+[EntyPoint(HttpMethods.Get, "/products/{productId}")]
+public ProductDto LoadProduct(string id) { ... }
 
-// will deliver this input to the entrypoint
+...
 
+// Call with
+GET http://.../products/abc1234
+```
+
+Service Host treats route placeholders like querystring parameters. For the above example that means you can change the route to `/products` and call the service with `http://.../products?id=abc1234` without any need to modify the function signature.
+
+#### Passing a parameter value as the request payload
+In case you need to call a service with more structured data you probably want to pass them in as the request payload. For Service Host to take the data from the payload instead of the querystring or the route, you need to annotate the one parameter in the function signature to be filled from the payload with `[Payload]`.
+
+```
+// Service
+public class AddRequest {
+    public int A { get; set; }
+    public int B { get; set; }
+}
+
+[EntryPoint(HttpMethods.Post, "/add")]
+public int Add([Payload]AddRequest req) {
+    return req.A + req.B;
+}
+
+// Call with
+POST http://.../add
+Content-Type: application/json
 {
-  "A": "3",
-  "B": "4"
+	"A":3,
+	"B":4
 }
 ```
 
-Input to the entrypoint as well as its value (output) are JSON strings. Hence the signature of an entrypoint function must be `string f(string input)`.
+If the parameter type is `string` Service Host takes the payload at face value. For other types it attempts a Json deserialization and requires the request header `Content-Type` to be `application/json`.
 
-If an entrypoint does not expect any input data, use `InputSources.Querystring`.
+![](../images/postjsonpayload.png)
+
+#### Returning results
+To return a result from your service function just give it an appropriate type - which is Json serializable.
+
+If the return type is `string` it will be return with `Content-Type` set to `text/plain`. Otherwise it will be Json serialized and returned as `application/json`.
+
+```
+// Service
+public class AddResult {
+    public int Sum { get; set; }
+}
+
+[EntryPoint(HttpMethods.Post, "/addJson")]
+public AddResult AddJson2([Payload]AddRequest req) {
+    return new AddResult { Sum = req.A + req.B };
+}
+
+// Call with
+POST http://.../add
+Content-Type: application/json
+{
+	"A":3,
+	"B":4
+}
+
+// Result
+Content-Type: application/json
+{
+   "Sum":7
+}
+```
+
+#### No parameters, no result
+Service Host will also "tolerate" service functions without any parameters and/or the return type being `void`.
 
 ### [Setup] Attribute
 If you want something to happen _before_ an entrypoint is called by Service Host you can provide a public method annotated with the `[Setup]` attribute. It will be run right before the entry point method.
@@ -146,7 +205,7 @@ $ mono servicehost.exe http://localhost:1234
 
 The application will search for service classes in all the `.dll`-assemblies in the current directory. Any endpoints will then be published at then URI passed as the first argument on the command line. Choose the URI to your needs.
 
-### Library Usage
+### Library Usage (self-hosting)
 If you want some more control and do the hosting in your own application you can do so, too. You just need to reference `servicehost.exe`. Then, in your code, start the Service Host like so:
 
 ```
