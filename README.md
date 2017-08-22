@@ -16,8 +16,7 @@ With Service Host you just sprinkle two attributes on this class (or a tiny wrap
 using servicehost.contract;
 
 [Service]
-public class SimpleService
-{
+public class SimpleMath {
     [EntryPoint(HttpMethods.Get, "/add"]
     public int Add(int a, int b) { return a+b; }
 }
