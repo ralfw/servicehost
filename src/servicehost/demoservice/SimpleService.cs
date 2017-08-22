@@ -32,6 +32,8 @@ namespace demoservice
         // Usage: /add?A=1&B=2
         [EntryPoint(HttpMethods.Get, "/add")]
         public AddResult Add(int a, int b) {
+            Console.WriteLine("Add({0},{1})", a, b);
+
             var simplemath = new Math();
             var sum = simplemath.Add(a, b); 
 

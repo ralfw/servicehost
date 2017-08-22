@@ -8,7 +8,7 @@ $(document).ready(function(){
         b = $("#B").val();
 
         $.get("/add?a=" + a + "&b=" + b, function(data, status){
-            $("#Result").html(data.Sum);
+            $("#Result").html(data.sum);
         });
     });
 });

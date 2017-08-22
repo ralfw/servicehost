@@ -70,7 +70,7 @@ update msg model =
 sendAddRequest a b =
     let
         url = "http://localhost:1234/add?A=" ++ a ++ "&B=" ++ b
-        decodeSum = field "Sum" int
+        decodeSum = field "sum" int
         request = Http.get url decodeSum
     in
         Http.send ResultReceived request

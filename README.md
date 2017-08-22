@@ -1,99 +1,68 @@
 # Service Host
 If you want to make some functionality coded in a .NET language easily available via HTTP, Service Host is here to help.
-You just have to be able to conform to a very simple service contract.
 
 ## Defining a Service
 Let's assume you want to publish this via HTTP:
+
 ```
 class SimpleMath {
     public int Add(int a, int b) { return a + b; }
 }
 ```
-With Service Host you'd write a small wrapper class, a service:
+
+With Service Host you just sprinkle two attributes on this class (or a tiny wrapper) - and that's it:
+
 ```
-using System.Web.Script.Serialization; // from System.Web.Extensions.dll
 using servicehost.contract;
 
 [Service]
 public class SimpleService
 {
-    [EntryPoint(HttpMethods.Get, "/add", InputSources.Querystring)]
-    public string Add(string input) {
-        var json = new JavaScriptSerializer();
-        AddRequest req = json.Deserialize<AddRequest>(input);
-
-        var simplemath = new SimpleMath();
-        var sum = simplemath.Add(req.A, req.B);
-
-        var result = new AddResult { Sum = sum };
-        return json.Serialize(result);
-    }
+    [EntryPoint(HttpMethods.Get, "/add"]
+    public int Add(int a, int b) { return a+b; }
 }
 ```
+
 The class is labeled as a service by putting the `[Service]` attribute on it.
+
 This attribute like the others is defined in `servicehost.contract.dll` which you need to reference from your service assembly.
 
 Public methods you want to make accessible via HTTP as a service then need to be labeled as entry points, again with an attribute.
-Each entry point states the HTTP method to use (e.g. `GET`) and a route, e.g. `/add`. Also it needs to tell Service Host where it expects any
-input data to come from. Either choose the URL query string (like above) or the HTTP payload (the default). In any case input data is
-delivered as a JSON string. Output data needs also needs to be returned as a JSON string. It's supposed to be simple service hosting, right?
 
-In the example above .NET's own JSON (de)serialiser is used from the `System.Web.Extensions` assembly. It parses the incoming data into
-an `AddRequest` object and nicely serialises the result object. Between clients and service the JSON contract is looking like this:
-```
-// input
-{
-  "A": 4,
-  "B": 3
-}
+Each entry point states the HTTP method to use (e.g. `GET`) and a route, e.g. `/add`.
 
-// output
-{
-  "Sum": 7
-}
-```
-The respective message classes for the service are straightforward:
-```
-public class AddRequest {
-    public int A { get; set; }
-    public int B { get; set; }
-}
+The values for the parameters are then taken from either the URL route or the query string of the URL or the HTTP payload.
 
-public class AddResult {
-    public int Sum { get; set; }
-}
-```
+In this case you'd call the service like this: `acme.com/add?a=41&b=1`.
 
 ## Hosting a Service
-Once you have set up an assembly with the service class and the actual functionality to publish, e.g. `demoservice.dll`, you put them in the same directory as the Service Host, e.g.
+To create a service it's easiest if you add Service Host to a *library project* - say `demoservice.dll` - using NuGet. You find the package [here](https://www.nuget.org/packages/servicehost/).
+
+A couple of assemblies will then be included in your project. Most notable of them `servicehost.contract.dll` and `servicehost.exe`.
+
+When you compile your project all assemblies end up in the same output directory. Go there and start Service Host like this:
+
 ```
-demoservice.dll
-demoservice.dll.mdb
-servicehost.contract.dll
-servicehost.contract.dll.mdb
-servicehost.exe
-servicehost.exe.mdb
-Nancy.dll
-Nancy.Hosting.Self.dll
+mono servicehost.exe http://localhost:8080
 ```
-This is enough for the Service Host to find your service upon start, e.g.
-```
-mono servicehost.exe http://localhost:1234
-```
-In fact Service Host will search all assemblies with the extension `.dll` in its directory for annotated types like above and publish them at the routes given.
+
+(Whether you need to use `mono` or not depends on what your platform is. On Windows you'll likely leave it out. But you need it on Linux or Mac OSX.)
+
+Service Host scans all `.dll`-assemblies in the directory and collects from them the service functions defined like above. They get published at the endpoints and your services are ready to go.
+
 
 ### Testing a Service
 To call the service you can use curl:
+
 ```
 $ curl http://localhost:1234/add?A=10&B=4
-{"Sum":14}
+14
 $
 ```
+
 (Please note: Maybe you have to escape the `&` with a `\` or some other character.)
 
 Or you use a tool like [Postman](https://www.getpostman.com):
-
-![](images/postman-get-querystring.png)
 
 ---
 

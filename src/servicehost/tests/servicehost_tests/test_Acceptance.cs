@@ -88,7 +88,7 @@ namespace servicehost_tests
                 // plain WebClient (yourservice)
                 Console.WriteLine("GET paramtypes");
                 var cli = new WebClient();
-                cli.DownloadString("http://localhost:1234//paramtypes?s=hello&i=42&b=true&d=3.14&f=3.1415&de=3.141592&i32=99&id=a1f5ca8a-9fed-498c-9cb7-a5627c49e779");
+                cli.DownloadString("http://localhost:1234//paramtypes?s=hello&i=42&b=true&d=3.14&f=3.1415&de=3.141592&i32=99&id=a1f5ca8a-9fed-498c-9cb7-a5627c49e779&da=22.8.2017");
             }
         }
 

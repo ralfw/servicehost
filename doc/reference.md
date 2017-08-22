@@ -1,5 +1,20 @@
 # Service Host Reference
 
+## Add Service Host to Your Project
+Service Host services are defined in .NET library projects.
+
+To add Service Host to your project, use NuGet. Call up the NuGet manager of your choice and search for "servicehost".
+
+![](../images/nuget package manager.png)
+
+Once you added the Service Host package you'll see a couple of more assemblies added to your project:
+
+![](../images/libs added.png)
+
+Now you're ready to define your service classes with their endpoint functions.
+
+Note that in all service projects at least `servicehost.contract.dll` needs to be referenced. It's the home of the Service Host attributes.
+
 ## Service Definition
 ### [Service] Attribute
 To advertize a class as a service for publication by Service Host you need to annotate it with the `[Service]` attribute and make it public:
@@ -9,7 +24,7 @@ using servicehost.contract;
 ...
 [Service]
 public class SimpleService {
-...
+  ...
 }
 ```
 
@@ -25,17 +40,40 @@ using servicehost.contract;
 ...
 [Service]
 public class SimpleService {
-  [EntyPoint(HttpMethods.Get, "/add", InputSources.Querystring)]
-  public string Add(string input) {
-    ...
+  [EntyPoint(HttpMethods.Get, "/echo")]
+  public string Echo(string text) {
+    return text;
   }
 }
 ```
 
-The `[EntryPoint]` attribute has three parameters:
+The `[EntryPoint]` attribute has two parameters:
 
-* First you have to specify the HTTP method to use by clients to reach the entrypoint. Chosse `HttpMethods.Get` or `HttpMethods.Post` or `HttpMethods.Put` or `HttpMethods.Delete`.
-* Second you have to state the URL route specific to the entrypoint. Upon calling the service it has to be appended to the Service Host URI, e.g. `http://localhost:1234/add`. The routes of all entrypoints per HTTP method on all service classes have to be distinct.
+* First you have to specify the **HTTP method** to use by clients to reach the entrypoint. Choose `HttpMethods.Get` or `HttpMethods.Post` or `HttpMethods.Put` or `HttpMethods.Delete`.
+* Second you have to state the **URL route** specific to the entrypoint. Upon calling the service it has to be appended to the Service Host URI, e.g. `http://localhost:1234/add`. The routes of all entrypoints on all service classes have to be *distinct per HTTP method*.
+
+The parameters are filled from three different sources. You don't have to specify which source to use, though, except one. Service Host will check them all for your convenience.
+
+#### Passing parameter values by query string
+The easiest way to pass in values to parameters is by appending them to the service URL.
+
+```
+// Service
+[EntyPoint(HttpMethods.Get, "/add")]
+public int Add(int a, int b) { ... }
+
+...
+
+// Call with
+http://.../add?a=1&b=42
+```
+
+Use the names of the parameters as the names of values in the querystring. This is not case sensitive and the order is not important.
+
+Service Host will make an effort to map the values from the URL string to the parameter types. It recognizes primitive types like `string`, `int`, `bool`, `double`, `float`, `decimal`, and also `Guid`.
+
+
+
 * Third you need to specify where the input data should be read from. `InputSources.Payload` means it's taken from the HTTP payload (requiring a Content-Type of "application/json"). But for simple parameters to the entrypoint you can alternatively use the URL querystring (`InputSources.Querystring`). Each querystring name/value pair will become a separate entry in the input JSON, e.g.
 
 ```
@@ -94,19 +132,19 @@ Currently service classes are instanciated for every HTTP call. No state can be 
 There should only be one `[Teardown]` method in a service class. Service Host will work with the first it finds via reflection.
 
 ### Exception Handling
-Any exceptions during service execution should be handled by the service itself. Design the output JSON data structures so that they are able to carry success as well as failure data.
+Any exceptions during service execution should be handled by the service itself. Design the output data structures so that they are able to carry success as well as failure data.
 
 However, if an exception slips through to Service Host it will be caught. It will be flagged to the client with HTTP status code 500 (internal server error). Also the exception's message will be passed back to the client in the payload of the response.
 
 ## Service Publication
 ### Command Line Usage
-You can focus on coding just your service assembly and let the Service Host command line application do the rest. Just start Service Host like this:
+You can focus on coding just your service assembly and let the Service Host command line application do the rest. Just start Service Host like this (use of `mono` depending on your platform):
 
 ```
 $ mono servicehost.exe http://localhost:1234
 ```
 
-The application will search for service classes in all the assemblies in the current directory. Any endpoints will then be published at then URI passed as the first argument on the command line. Choose the URI to your needs.
+The application will search for service classes in all the `.dll`-assemblies in the current directory. Any endpoints will then be published at then URI passed as the first argument on the command line. Choose the URI to your needs.
 
 ### Library Usage
 If you want some more control and do the hosting in your own application you can do so, too. You just need to reference `servicehost.exe`. Then, in your code, start the Service Host like so:
@@ -131,7 +169,7 @@ host.Start(new Uri("http://localhost:1234"));
 host.Stop();
 ```
 ## Calling a Service
-Calling a service hosted by Service Host is straightforward using basic classes from the .NET base class library. But feel free to check out [RestSharp](http://restsharp.org/) for example.
+Calling a service hosted by Service Host is straightforward using classes from the .NET base class library. But feel free to check out [RestSharp](http://restsharp.org/) for even more convenience.
 
 Here's how you can do it if you want to pass the input via querystring parameters:
 
@@ -141,8 +179,8 @@ using servicehost.contract;
 ...
 [Service]
 public class SimpleService {
-  [EntyPoint(HttpMethods.Get, "/add", InputSources.Querystring)]
-  public string Add(string input) {
+  [EntryPoint(HttpMethods.Get, "/add")]
+  public int Add(int a, int b) {
     ...
   }
 }
@@ -150,33 +188,37 @@ public class SimpleService {
 // Client
 using System.Net;
 ...
-var output = new WebClient().DownloadString("http://localhost:1234/add?A=3&B=4");
+var cli = new WebClient();
+var output = cli.DownloadString("http://localhost:1234/add?A=3&B=4");
 ```
 
-`output` will contain the output JSON, e.g. `{"Sum":7}`.
+`output` will contain the result, a plain `7`.
 
-In case you want to provide the input with the HTTP payload, though, you have to build the JSON yourself:
+In case you want to provide the input with the HTTP payload, though, you need to pass in the data as a Json string and set the `Content-Type` header accordingly:
 
 ```
 // Service
 using servicehost.contract;
 ...
+public class AddRequest {
+    public int A { get; set; }
+    public int B { get; set; }
+}
+
 [Service]
 public class SimpleService {
-  [EntyPoint(HttpMethods.Get, "/add", InputSources.Payload)]
-  public string Add(string input) {
-    ...
-  }
+    [EntryPoint(HttpMethods.Post, "/add")]
+    public int Add([Payload]AddRequest req) {
+        return req.A + req.B;
+    }
 }
 
 // Client
 var cli = new WebClient();
 cli.Headers.Add("Content-Type", "application/json");
-var input = "{\"A\":3, \"B\":4}";
-var output = cli.UploadString("http://localhost:1234/add", "Get", input);
+var output = cli.UploadString("http://localhost:1234/add", 
+                              "{\"A\":3, \"B\":4}");
 ```
-
-Make sure to set the `Content-Type` to `application/json` and provide the right HTTP method with the call to `UploadString()`.
 
 ### Exception Handling
 Any exceptions happening during service execution should be handled by your service side code gracefully and be encoded in the JSON output. Service Host does not provide any special way to carry exceptions back to the client.
@@ -205,7 +247,7 @@ catch (WebException webex) {
 ## Static Content
 Service Host does not just provide access to hosted service logic but also to static content like HTML pages or images.
 
-Static content just needs to be stored in a directory called `content` in the Service Host folder. When a service is accessed via `http://localhost:1234/add` then static content can be reached like so: `http://localhost:1234/content/helloworld.html`.
+Static content just needs to be stored in a directory called `content` in the Service Host folder. It can be reached like so: `http://localhost:1234/content/helloworld.html`.
 
 Check out the demo client:
 

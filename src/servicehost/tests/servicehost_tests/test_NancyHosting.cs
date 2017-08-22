@@ -123,6 +123,48 @@ namespace servicehost_tests
                 }
             }
         }
+
+
+        [Test]
+        public void Host_same_route_with_different_verbs()
+        {
+            using (var sut = new NancyHosting())
+            {
+                Console.WriteLine("Started...");
+                sut.Start(new Uri("http://localhost:1234"), new[] {
+                    new ServiceInfo{
+                        ServiceType = typeof(NancyHostingTestService),
+                        EntryPointMethodname = "ToUpper",
+                        Route = "/changecase",
+                        HttpMethod = HttpMethods.Get,
+                        Parameters = new[]{ new ServiceParameter { Name = "text", Type = typeof(string)}},
+                        ResultType = typeof(string)
+                    },
+                    new ServiceInfo{
+                        ServiceType = typeof(NancyHostingTestService),
+                        EntryPointMethodname = "ToLower",
+                        Route = "/changecase",
+                        HttpMethod = HttpMethods.Post,
+                        Parameters = new[]{ new ServiceParameter { Name = "text", Type = typeof(string)}},
+                        ResultType = typeof(string)
+                    }
+                });
+                Console.WriteLine("Started with service!");
+
+                var cli = new WebClient();
+                var result = cli.DownloadString("http://localhost:1234/changecase?text=hello");
+                Console.WriteLine("Called...");
+                Assert.AreEqual(new[] { "ViaGet" }, NancyHostingTestService.Log.ToArray());
+                Assert.AreEqual("HELLO", result);
+                Console.WriteLine("Received: {0}", result);
+
+                result = cli.UploadString("http://localhost:1234/changecase?text=HELLO", "");
+                Console.WriteLine("Called...");
+                Assert.AreEqual(new[] { "ViaPost" }, NancyHostingTestService.Log.ToArray());
+                Assert.AreEqual("hello", result);
+                Console.WriteLine("Received: {0}", result);
+            }
+        }
     }
 
     public class NancyHostingTestModule : NancyModule
@@ -145,6 +187,17 @@ namespace servicehost_tests
         public string Echo(string ping) {
             Log.Add("handle");
             return ping.Replace("$data", "42");
+        }
+
+
+        public string ToUpper(string text) {
+            Log.Add("ViaGet");
+            return text.ToUpper();
+        }
+
+        public string ToLower(string text) {
+            Log.Add("ViaPost");
+            return text.ToLower();
         }
     }
 }

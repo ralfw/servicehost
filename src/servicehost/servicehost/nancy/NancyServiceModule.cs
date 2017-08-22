@@ -90,6 +90,9 @@ namespace servicehost.nonpublic.nancy
                 else if (param.Type == typeof(Guid)) {
                     return new Guid(data);
                 }
+                else if (param.Type == typeof(DateTime)) {
+                    return DateTime.Parse(data);
+                }
                 else {
                     var json = new JavaScriptSerializer();
                     return json.Deserialize(data, param.Type);
