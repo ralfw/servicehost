@@ -5,11 +5,11 @@ Service Host services are defined in .NET library projects.
 
 To add Service Host to your project, use NuGet. Call up the NuGet manager of your choice and search for "servicehost".
 
-![](images/nuget package manager.png)
+![](images/nuget%20package%20manager.png)
 
 Once you added the Service Host package you'll see a couple of more assemblies added to your project:
 
-![](images/libs added.png)
+![](images/libs%20added.png)
 
 Now you're ready to define your service classes with their endpoint functions.
 
