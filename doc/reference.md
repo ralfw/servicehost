@@ -5,11 +5,11 @@ Service Host services are defined in .NET library projects.
 
 To add Service Host to your project, use NuGet. Call up the NuGet manager of your choice and search for "servicehost".
 
-![](../images/nuget package manager.png)
+![](images/nuget package manager.png)
 
 Once you added the Service Host package you'll see a couple of more assemblies added to your project:
 
-![](../images/libs added.png)
+![](images/libs added.png)
 
 Now you're ready to define your service classes with their endpoint functions.
 
@@ -114,7 +114,7 @@ Content-Type: application/json
 
 If the parameter type is `string` Service Host takes the payload at face value. For other types it attempts a Json deserialization and requires the request header `Content-Type` to be `application/json`.
 
-![](../images/postjsonpayload.png)
+![](images/postjsonpayload.png)
 
 #### Returning results
 To return a result from your service function just give it an appropriate type - which is Json serializable.
