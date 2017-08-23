@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web.Script.Serialization;
 using Nancy;
 using Nancy.Extensions;
+using servicehost.contract;
 
 namespace servicehost.nonpublic.nancy
 {
-
     public class NancyServiceModule : Nancy.NancyModule
     {
         public NancyServiceModule(IEnumerable<ServiceInfo> services) {
@@ -66,8 +66,11 @@ namespace servicehost.nonpublic.nancy
                 if (param.Type == typeof(string))
                     return this.Request.Body.AsString();
                 else {
-                    if (!this.Request.Headers["Content-Type"].Any(h => h == "application/json"))
+                    if (this.Request.Headers["Content-Type"].All(h => h != "application/json"))
                         throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
+                    
+                    if (param.Type == typeof(JsonData))
+                        return new JsonData(this.Request.Body.AsString());
                     
                     var payloadJson = this.Request.Body.AsString();
                     return new JavaScriptSerializer().Deserialize(payloadJson, param.Type);
@@ -93,6 +96,8 @@ namespace servicehost.nonpublic.nancy
                 else if (param.Type == typeof(DateTime)) {
                     return DateTime.Parse(data);
                 }
+                else if (param.Type == typeof(JsonData))
+                    return new JsonData(data);
                 else {
                     var json = new JavaScriptSerializer();
                     return json.Deserialize(data, param.Type);
@@ -108,7 +113,8 @@ namespace servicehost.nonpublic.nancy
                 return response;
             }
             else {
-                var objJson = new Nancy.Json.JavaScriptSerializer().Serialize(obj);
+                var objJson = obj is JsonData ? ((JsonData) obj).Data
+                                              : new Nancy.Json.JavaScriptSerializer().Serialize(obj);
                 var response = (Response)objJson;
                 response.ContentType = "application/json";
                 return response;

@@ -147,8 +147,20 @@ Content-Type: application/json
 }
 ```
 
+#### Passing raw Json data
+If you want to pass in raw Json without automatic conversion by Service Host you can use the `JsonData` type. Here's an artifical example for how to do that:
+
+```
+[EntryPoint(HttpMethods.Post, "/jsondata")]
+public JsonData JsonInAndOut(JsonData a, [Payload] JsonData p) {
+    return new JsonData("{...}");
+}
+```
+
+Alternatively you could use the `string` type for `a`. But if the payload or the result is expected to be Json, then the content-type should be set accordingly. This is checked/done only if you use the `JsonData` type.
+
 #### No parameters, no result
-Service Host will also "tolerate" service functions without any parameters and/or the return type being `void`.
+Service Host will also "tolerate" service functions without any parameters and/or a return type of `void`.
 
 ### [Setup] Attribute
 If you want something to happen _before_ an entrypoint is called by Service Host you can provide a public method annotated with the `[Setup]` attribute. It will be run right before the entry point method.

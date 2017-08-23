@@ -76,9 +76,26 @@ namespace servicehost_tests
 
 
         [Test]
-        public void Param_type_mapping()
-        {
-            Console.WriteLine("---Start call stop---");
+        public void JsonData_in_and_out() {
+            Console.WriteLine("---JsonData in and out---");
+
+            using (var sut = new ServiceHost())
+            {
+                var endpoint = new Uri("http://localhost:1234");
+                sut.Start(endpoint);
+
+                var cli = new WebClient();
+                cli.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                var result = cli.UploadString("http://localhost:1234//jsondata?a={\"n\":42}", "{\"pi\":3.14}");
+                Assert.AreEqual("{\n{\"n\":42}\n{\"pi\":3.14}\n}", result);
+                Console.WriteLine(result);
+            }
+        }
+
+        
+        [Test]
+        public void Param_type_mapping() {
+            Console.WriteLine("---Param type mapping---");
 
             using (var sut = new ServiceHost())
             {

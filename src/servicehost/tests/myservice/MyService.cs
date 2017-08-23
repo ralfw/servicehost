@@ -51,6 +51,11 @@ namespace myservice
             Console.WriteLine("MyService.ParamTypes");
             Console.WriteLine($"s:{s}, i:{i}, b:{b}, d:{d}, f:{f}, de:{de}, i32:{i32}, id:{id}, da:{da}");
         }
+
+        [EntryPoint(HttpMethods.Post, "/jsondata")]
+        public JsonData JsonInAndOut(JsonData a, [Payload] JsonData p) {
+            return new JsonData("{\n" + a.Data + "\n" + p.Data + "\n}");
+        }
     }
 
 
