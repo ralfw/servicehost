@@ -78,7 +78,7 @@ You also can put data into routes. This is a feature of the underlying techology
 ```
 // Service
 [EntyPoint(HttpMethods.Get, "/products/{productId}")]
-public ProductDto LoadProduct(string id) { ... }
+public ProductDto LoadProduct(string productId) { ... }
 
 ...
 
