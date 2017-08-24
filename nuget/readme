@@ -7,3 +7,7 @@ Anschließend kann das Script gestartet werden mit
 
 ./publish
 
+Achtung: im Script steht die Major Versionsnummer, um eine
+Filemask angeben zu könnne, die servicehost.x.y.z.nupkg
+unterscheidet von servicehost.contracts.x.y.z.nupkg
+
