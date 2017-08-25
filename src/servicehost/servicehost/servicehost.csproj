@@ -32,6 +32,9 @@
     <Reference Include="Nancy, Version=1.4.4.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Nancy.1.4.4\lib\net40\Nancy.dll</HintPath>
     </Reference>
+    <Reference Include="servicehost.contract, Version=2.3.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\servicehost.contract.2.3.1\lib\net45\servicehost.contract.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Nancy.Hosting.Self">
       <HintPath>..\packages\Nancy.Hosting.Self.1.4.1\lib\net40\Nancy.Hosting.Self.dll</HintPath>
@@ -56,12 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\servicehost.contract\servicehost.contract.csproj">
-      <Project>{AFA702A0-4CD9-452B-90A0-CB52C48170AE}</Project>
-      <Name>servicehost.contract</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="nancy\" />
