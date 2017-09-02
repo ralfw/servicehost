@@ -46,16 +46,17 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="nancy\nonpublic\NancyBootstrapper.cs" />
+    <Compile Include="nancy\nonpublic\NancyHosting.cs" />
+    <Compile Include="nancy\nonpublic\ServiceAdapter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="nancy\NancyBootstrapper.cs" />
-    <Compile Include="nancy\NancyHosting.cs" />
     <Compile Include="nancy\NancyServiceModule.cs" />
-    <Compile Include="nancy\ServiceAdapter.cs" />
     <Compile Include="ServiceCollector.cs" />
     <Compile Include="CLI.cs" />
     <Compile Include="ServiceHost.cs" />
     <Compile Include="data\ServiceInfo.cs" />
+    <Compile Include="ServiceModuleFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

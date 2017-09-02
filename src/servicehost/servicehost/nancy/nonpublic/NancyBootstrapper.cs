@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using Nancy.Conventions;
 using servicehost.nonpublic;
 
-namespace servicehost.nancy
+namespace servicehost.nancy.nonpublic
 {
     class NancyBootstrapper : Nancy.DefaultNancyBootstrapper {
         readonly IEnumerable<ServiceInfo> services;

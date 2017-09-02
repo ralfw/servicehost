@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace servicehost.nonpublic.nancy
+namespace servicehost.nancy.nonpublic
 {
     class ServiceAdapter {
         readonly Type type;

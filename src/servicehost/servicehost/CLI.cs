@@ -4,7 +4,6 @@ using servicehost.nancy;
 
 namespace servicehost
 {
-
     class CLI {
         public Uri Endpoint { get; }
 
@@ -14,5 +13,4 @@ namespace servicehost
             this.Endpoint = new Uri(args[0]);
         }
     }
-    
 }

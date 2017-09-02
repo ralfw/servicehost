@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Nancy.Hosting.Self;
 using servicehost.nonpublic;
 
-namespace servicehost.nancy
+namespace servicehost.nancy.nonpublic
 {
     class NancyHosting : IDisposable
     {

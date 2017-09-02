@@ -5,8 +5,11 @@ using System.Web.Script.Serialization;
 using Nancy;
 using Nancy.Extensions;
 using servicehost.contract;
+using servicehost.nancy.nonpublic;
+using servicehost.nonpublic;
+using HttpMethods = servicehost.nonpublic.HttpMethods;
 
-namespace servicehost.nonpublic.nancy
+namespace servicehost.nancy
 {
     public class NancyServiceModule : Nancy.NancyModule
     {

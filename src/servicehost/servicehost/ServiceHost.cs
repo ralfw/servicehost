@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nancy.Hosting.Self;
-using servicehost.nancy;
+using servicehost.nancy.nonpublic;
 
 namespace servicehost
 {

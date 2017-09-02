@@ -10,6 +10,7 @@ using RestSharp;
 using System.IO;
 using System.Text;
 using Nancy;
+using servicehost.nancy.nonpublic;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace servicehost_tests
