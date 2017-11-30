@@ -1,4 +1,6 @@
-﻿namespace servicehost.contract
+﻿using System;
+
+namespace servicehost.contract
 {
     public struct JsonData {
         public JsonData(string data) => Data = data;

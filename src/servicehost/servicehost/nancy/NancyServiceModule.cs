@@ -68,23 +68,23 @@ namespace servicehost.nancy
             if (param.IsPayload) {
                 if (param.Type == typeof(string))
                     return this.Request.Body.AsString();
-                else {
-                    if (this.Request.Headers["Content-Type"].All(h => h != "application/json"))
-                        throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
-                    
-                    if (param.Type == typeof(JsonData))
-                        return new JsonData(this.Request.Body.AsString());
-                    
-                    var payloadJson = this.Request.Body.AsString();
-                    return new JavaScriptSerializer().Deserialize(payloadJson, param.Type);
-                }
+                
+                if (this.Request.Headers["Content-Type"].All(h => h != "application/json"))
+                    throw new InvalidOperationException("Invalid Content-Type for payload data! Needs to be 'application/json'.");
+                
+                if (param.Type == typeof(JsonData))
+                    return new JsonData(this.Request.Body.AsString());
+                
+                var payloadJson = this.Request.Body.AsString();
+                return new JavaScriptSerializer().Deserialize(payloadJson, param.Type);
             }
-            else if (Is_in(routeParams)) {
+            
+            if (Is_in(routeParams))
                 return Parse(routeParams[param.Name].ToString());
-            }
-            else if (Is_in(querystringParams)) {
+                
+            if (Is_in(querystringParams))
                 return Parse(querystringParams[param.Name].ToString());
-            }
+
             throw new InvalidOperationException($"Parameter not found in route or query string: {param.Name}!");
 
 
@@ -93,18 +93,14 @@ namespace servicehost.nancy
             object Parse(string data) {
                 if (param.Type == typeof(string))
                     return data;
-                else if (param.Type == typeof(Guid)) {
+                if (param.Type == typeof(Guid))
                     return new Guid(data);
-                }
-                else if (param.Type == typeof(DateTime)) {
+                if (param.Type == typeof(DateTime))
                     return DateTime.Parse(data);
-                }
-                else if (param.Type == typeof(JsonData))
+                if (param.Type == typeof(JsonData))
                     return new JsonData(data);
-                else {
-                    var json = new JavaScriptSerializer();
-                    return json.Deserialize(data, param.Type);
-                }
+                var json = new JavaScriptSerializer();
+                return json.Deserialize(data, param.Type);
             }
         }
 
@@ -116,8 +112,8 @@ namespace servicehost.nancy
                 return response;
             }
             else {
-                var objJson = obj is JsonData ? ((JsonData) obj).Data
-                                              : new Nancy.Json.JavaScriptSerializer().Serialize(obj);
+                var objJson = obj is JsonData data ? data.Data
+                                                   : new Nancy.Json.JavaScriptSerializer().Serialize(obj);
                 var response = (Response)objJson;
                 response.ContentType = "application/json";
                 return response;
