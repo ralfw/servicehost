@@ -4,7 +4,7 @@
     {
         public static void Main(string[] args) {
             var cli = new CLI(args);
-			Server.Run(cli.Endpoint);
+			ServiceHost.Run(cli.Endpoint);
         }
     }
 }
