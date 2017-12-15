@@ -19,10 +19,14 @@ namespace servicehost
         }
 
         IEnumerable<Assembly> Collect_assemblies() {
-            var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
-            var assemblyFilenames = Directory.GetFiles(currentAssemblyPath, "*.dll").Concat(Directory.GetFiles(".", "*.dll"));
-            foreach (var f in assemblyFilenames)
+            var currentAssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Console.WriteLine($"Collect_assemblies(): path={currentAssemblyPath}");
+            var assemblyFilenames = Directory.GetFiles(currentAssemblyPath, "*.dll")
+                                             .Concat(Directory.GetFiles(".", "*.dll"));
+            foreach (var f in assemblyFilenames) {
+                Console.WriteLine($"    assembly={f}");
                 yield return Assembly.LoadFrom(f);
+            }
         }
 
         IEnumerable<Type> Collect_types(IEnumerable<Assembly> assemblies)
