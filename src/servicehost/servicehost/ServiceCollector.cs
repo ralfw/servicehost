@@ -18,10 +18,8 @@ namespace servicehost
             return Compile_services(types);
         }
 
-        IEnumerable<Assembly> Collect_assemblies()
-        {
-            var currentAssembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
-			var currentAssemblyPath = Path.GetDirectoryName(currentAssembly).Replace("file:", "");
+        IEnumerable<Assembly> Collect_assemblies() {
+            var currentAssemblyPath = Assembly.GetExecutingAssembly().Location;
             var assemblyFilenames = Directory.GetFiles(currentAssemblyPath, "*.dll").Concat(Directory.GetFiles(".", "*.dll"));
             foreach (var f in assemblyFilenames)
                 yield return Assembly.LoadFrom(f);
