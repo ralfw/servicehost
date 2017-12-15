@@ -318,7 +318,7 @@ catch (WebException webex) {
 ## Static Content
 Service Host does not just provide access to hosted service logic but also to static content like HTML pages or images.
 
-Static content just needs to be stored in a directory called `content` in the Service Host folder. It can be reached like so: `http://localhost:1234/content/helloworld.html`.
+Static content just needs to be stored in a directory called `Content` (the capital C is important!) in the Service Host folder. It can be reached like so: `http://localhost:1234/content/helloworld.html`.
 
 Check out the demo client:
 
