@@ -223,13 +223,23 @@ If you want some more control and do the hosting in your own application you can
 ```
 using servicehost;
 ...
+ServiceHost.Run(new Uri("http://localhost:1234"));
+```
+
+This is a synchronous call. Service Host will run until you quit by pressing Ctrl-C. It's like starting `servicehost.exe` only in your own code. This is most convenient when you have a console application where you want to do some setup before Service Host actually starts.
+
+In case you want to retain control while Service Host is running, you can instantiate it yourself, though:
+
+```
+using servicehost;
+...
 using(var host = new ServiceHost()) {
 	host.Start(new Uri("http://localhost:1234"));
 	// do what you have to do to keep the process alive
 }
 ```
 
-In case you cannot wrap the Service Host instance with a `using` you should call `Stop()` at the end:
+If you cannot wrap the Service Host instance with a `using` you should call `Stop()` at the end:
 
 ```
 using servicehost;
@@ -239,6 +249,8 @@ host.Start(new Uri("http://localhost:1234"));
 ...
 host.Stop();
 ```
+
+That way 
 ## Calling a Service
 Calling a service hosted by Service Host is straightforward using classes from the .NET base class library. But feel free to check out [RestSharp](http://restsharp.org/) for even more convenience.
 
