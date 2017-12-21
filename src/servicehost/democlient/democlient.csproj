@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,6 +35,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DemoClientService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -42,6 +43,10 @@
     <ProjectReference Include="..\demoservice\demoservice.csproj">
       <Project>{85B85E4F-99A6-4174-A770-9DE650B1CC47}</Project>
       <Name>demoservice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\servicehost.contract\servicehost.contract.csproj">
+      <Project>{AFA702A0-4CD9-452B-90A0-CB52C48170AE}</Project>
+      <Name>servicehost.contract</Name>
     </ProjectReference>
     <ProjectReference Include="..\servicehost\servicehost.csproj">
       <Project>{F0176FC7-ACC8-46FF-9DF3-90157205D69C}</Project>

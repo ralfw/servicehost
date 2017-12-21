@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
+using System.Runtime.Remoting.Services;
 using RestSharp;
 using servicehost;
 
@@ -10,12 +12,13 @@ namespace democlient
         public static void Main(string[] args)
         {
             using (var servicehost = new ServiceHost()) {
-                servicehost.Start(new Uri("http://localhost:1234"));
+                servicehost.Start(new Uri("http://localhost:1234"), new[]{typeof(DemoClientService)});
 
                 Call_math_service();
                 Call_forecasting_service();
+                Call_demo_service();
 
-                Console.Write("Press ENTER to terminate program: ");
+                Console.Write("Press ENTER to terminate program");
                 Console.ReadLine();
             }
         }
@@ -47,6 +50,18 @@ namespace democlient
 
             var reply = rest.Execute<SimulationResult>(req);
             Console.WriteLine("  Result of forecast service call: {0}", string.Join(",",reply.Data.Forecasts));
+        }
+
+
+        static void Call_demo_service()
+        {
+            var rest = new RestClient("http://localhost:1234");
+            var req = new RestRequest("/client/subtract", Method.GET);
+            req.AddQueryParameter("A", "12");
+            req.AddQueryParameter("B", "5");
+
+            var reply = rest.Execute<int>(req);
+            Console.WriteLine("  Result of demo client subtract service call: {0}", reply.Data);
         }
    }
 

@@ -10,11 +10,12 @@ namespace servicehost
 {
     class ServiceCollector
     {
-        public IEnumerable<ServiceInfo> Collect()
-        {
+        public IEnumerable<ServiceInfo> Collect() => Collect(new Type[0]);
+        public IEnumerable<ServiceInfo> Collect(IEnumerable<Type> serviceTypeCandidates) {
             var assemblies = Collect_assemblies().ToArray();
             //foreach (var a in assemblies) Console.WriteLine($"assembly found: {a.FullName}");
-            var types = Collect_types(assemblies).ToArray();
+            var types = Collect_service_types(assemblies)
+                        .Concat(Keep_service_types(serviceTypeCandidates));
             return Compile_services(types);
         }
 
@@ -29,11 +30,15 @@ namespace servicehost
             }
         }
 
-        IEnumerable<Type> Collect_types(IEnumerable<Assembly> assemblies)
-        {
-            return assemblies.SelectMany(assm => assm.GetTypes()
-                                                     .Where(t => t.GetCustomAttribute<ServiceAttribute>() != null));
+        
+        IEnumerable<Type> Collect_service_types(IEnumerable<Assembly> assemblies) {
+            return assemblies.SelectMany(assm => Keep_service_types(assm.GetTypes()));
         }
+        
+        IEnumerable<Type> Keep_service_types(IEnumerable<Type> types) {
+            return types.Where(t => t.GetCustomAttribute<ServiceAttribute>() != null);
+        }
+        
 
         IEnumerable<ServiceInfo> Compile_services(IEnumerable<Type> types)
         {
@@ -65,7 +70,7 @@ namespace servicehost
             return service;
         }
 
-        servicehost.nonpublic.HttpMethods MapHttpMethod(servicehost.contract.HttpMethods httpMethod)
+        nonpublic.HttpMethods MapHttpMethod(contract.HttpMethods httpMethod)
         {
             switch (httpMethod) {
                 case servicehost.contract.HttpMethods.Post: return servicehost.nonpublic.HttpMethods.Post;

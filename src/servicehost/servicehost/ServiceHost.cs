@@ -9,9 +9,11 @@ namespace servicehost
 {
     public class ServiceHost : IDisposable
     {
-        public static void Run(Uri endpointUri) {
+        public static void Run(Uri endpointUri) => Run(endpointUri, new Type[0]);
+        public static void Run(Uri endpointUri, Type[] serviceTypes) {
+            if (serviceTypes == null) throw new ArgumentNullException(nameof(serviceTypes));
             using (var servicehost = new ServiceHost()) {
-                servicehost.Start(endpointUri);
+                servicehost.Start(endpointUri, serviceTypes);
                 Console.WriteLine("Service host running on {0}...", endpointUri.ToString());
 
                 if (Is_running_on_Mono) {
@@ -32,12 +34,13 @@ namespace servicehost
         
         NancyHosting nancyHost;
 
-        public void Start(Uri endpoint) {
+        public void Start(Uri endpoint) => Start(endpoint, new Type[0]);
+        public void Start(Uri endpoint, IEnumerable<Type> serviceTypes) {
             var collector = new ServiceCollector();
             this.nancyHost = new NancyHosting();
 
             //Console.WriteLine($"Compiling services...");
-            var services = collector.Collect();
+            var services = collector.Collect(serviceTypes);
             //Log(services);
             this.nancyHost.Start(endpoint, services);
         }

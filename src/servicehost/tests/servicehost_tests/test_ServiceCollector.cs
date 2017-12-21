@@ -9,6 +9,7 @@ using servicehost.nancy;
 using servicehost.contract;
 using System.Reflection;
 using System.IO;
+using HttpMethods = servicehost.contract.HttpMethods;
 
 namespace servicehost_tests
 {
@@ -21,13 +22,16 @@ namespace servicehost_tests
             Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
         }
 
+        
         [Test]
         public void Collect()
         {
             var sut = new ServiceCollector();
 
-            var services = sut.Collect();
-
+            var services = sut.Collect().ToArray();
+            
+            Assert.AreEqual(16, services.Length);
+            
             var service = services.Where(s => s.ServiceType.Name.IndexOf("MyService") >= 0 && s.EntryPointMethodname == "Echo").FirstOrDefault();
             Assert.AreEqual(servicehost.nonpublic.HttpMethods.Get, service.HttpMethod);
             Assert.AreEqual("Arrange", service.SetupMethodname);
@@ -73,6 +77,31 @@ namespace servicehost_tests
             Assert.AreEqual("/deafmute", service.Route);
             Assert.AreEqual(0, service.Parameters.Length);
             Assert.AreSame(service.ResultType, typeof(void));
+        }
+        
+        
+        [Test]
+        public void Collect_explicit()
+        {
+            var sut = new ServiceCollector();
+
+            var services = sut.Collect(new[]{typeof(SomeTestService), typeof(test_ServiceCollector)}).ToArray();
+            
+            Assert.AreEqual(17, services.Length);
+            
+            var service = services.Where(s => s.ServiceType.Name.IndexOf("SomeTestService") >= 0 && s.EntryPointMethodname == "f").FirstOrDefault();
+            Assert.IsNotNull(service);
+            
+            service = services.Where(s => s.ServiceType.Name.IndexOf("test_ServiceCollector") >= 0).FirstOrDefault();
+            Assert.IsNull(service);
+        }
+
+
+        [Service]
+        class SomeTestService
+        {
+            [EntryPoint(HttpMethods.Get, "/test")]
+            public void f() {}
         }
     }
 }
