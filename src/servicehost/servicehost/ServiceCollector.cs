@@ -13,7 +13,6 @@ namespace servicehost
         public IEnumerable<ServiceInfo> Collect() => Collect(new Type[0]);
         public IEnumerable<ServiceInfo> Collect(IEnumerable<Type> serviceTypeCandidates) {
             var assemblies = Collect_assemblies().ToArray();
-            //foreach (var a in assemblies) Console.WriteLine($"assembly found: {a.FullName}");
             var types = Collect_service_types(assemblies)
                         .Concat(Keep_service_types(serviceTypeCandidates));
             return Compile_services(types);
@@ -21,13 +20,9 @@ namespace servicehost
 
         IEnumerable<Assembly> Collect_assemblies() {
             var currentAssemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Console.WriteLine($"Collect_assemblies(): path={currentAssemblyPath}");
             var assemblyFilenames = Directory.GetFiles(currentAssemblyPath, "*.dll")
                                              .Concat(Directory.GetFiles(".", "*.dll"));
-            foreach (var f in assemblyFilenames) {
-                Console.WriteLine($"    assembly={f}");
-                yield return Assembly.LoadFrom(f);
-            }
+            return assemblyFilenames.Select(Assembly.LoadFrom);
         }
 
         
