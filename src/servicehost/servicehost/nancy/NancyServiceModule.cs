@@ -13,7 +13,10 @@ namespace servicehost.nancy
 {
     public class NancyServiceModule : Nancy.NancyModule
     {
-        public NancyServiceModule(IEnumerable<ServiceInfo> services) {
+        public NancyServiceModule(IEnumerable<ServiceInfo> services)
+        {
+            Options[@"^(.*)$"] = p => CORS.Handle_preflight_request(Request);
+            
             foreach (var service in services)
                 Register_service(service);
         }
@@ -32,7 +35,7 @@ namespace servicehost.nancy
                     var output = handler.Execute(input);
 
                     var response = Produce_output(output);
-                    return Enable_CORS(response);
+                    return CORS.Handle_simple_request(Request, response);
                 }
                 catch (Exception ex) {
                     var resp = (Response)($"ServiceHost: Service request could not be handled! Exception: {ex}");
@@ -119,12 +122,30 @@ namespace servicehost.nancy
                 return response;
             }
         }
+    }
 
 
-        Response Enable_CORS(Response response) {
-            var origin = Request.Headers["Origin"].FirstOrDefault();
+    static class CORS {
+        public static Response Handle_preflight_request(Request req) {
+            var resp = new Response {StatusCode = HttpStatusCode.OK};
+            resp.Headers.Add("Access-Control-Allow-Origin", "*");
+            resp.Headers.Add("Access-Control-Max-Age", "86400");
+
+            var corsheader = req.Headers["Access-Control-Request-Method"].FirstOrDefault();
+            if (corsheader != null)
+                resp.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+            corsheader = req.Headers["Access-Control-Request-Headers"].FirstOrDefault();
+            if (corsheader != null)
+                resp.Headers.Add("Access-Control-Allow-Headers", corsheader);
+            
+            return resp;
+        }
+        
+        public static Response Handle_simple_request(Request req, Response response) {
+            var origin = req.Headers["Origin"].FirstOrDefault();
             if (origin != null)
-                response.Headers.Add("Access-Control-Allow-Origin", origin);
+                response.Headers.Add("Access-Control-Allow-Origin", "*");
             return response;
         }
     }
